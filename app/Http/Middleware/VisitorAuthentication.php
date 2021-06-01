@@ -17,9 +17,9 @@ class VisitorAuthentication
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role_id == 2) {
+        if (Auth::check() && Auth::user()->role_id == 2) {
             return $next($request);
         }
-        return $next($request);
+        return redirect()->route('unauthorized');
     }
 }

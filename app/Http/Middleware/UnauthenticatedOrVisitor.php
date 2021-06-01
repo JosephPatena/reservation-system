@@ -6,7 +6,7 @@ use Auth;
 use Closure;
 use Illuminate\Http\Request;
 
-class AdminAuthentication
+class UnauthenticatedOrVisitor
 {
     /**
      * Handle an incoming request.
@@ -17,9 +17,8 @@ class AdminAuthentication
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role_id == 1) {
+        if (Auth::guest() || (Auth::check() && Auth::user()->role_id == 2)) {
             return $next($request);
         }
-        return redirect()->route('unauthorized');
     }
 }

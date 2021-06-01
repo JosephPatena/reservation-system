@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\GuestController;
+use App\Http\Controllers\BooknowController;
 use App\Http\Controllers\HomepageController;
 
 /*
@@ -26,16 +29,12 @@ Route::get('/', function(){
 	{
 		return redirect()->route('admin_homepage');
 	}
-	else if (Auth::check() && Auth::user()->role_id == 2)
-	{
-		return redirect()->route('guest_homepage');
-	}
-	return redirect()->route('login');
+	return redirect()->route('guest_homepage');
 });
 
 /*
 |--------------------------------------------------------------------------
-| Guest routes
+| Unauthenticated routes
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => 'guest'], function(){
@@ -64,12 +63,30 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 
 /*
 |--------------------------------------------------------------------------
-| Teacher routes
+| Unauthenticated or Visitor routes
+|--------------------------------------------------------------------------
+*/
+Route::group(['middleware' => ['unauthenticated_or_visitor']], function(){
+	# Homepage
+	Route::get('guest/homepage', [HomepageController::class, 'guest_homepage'])->name('guest_homepage');
+
+	# Room
+	Route::resource('room', RoomController::class);
+
+	# Guest
+	Route::resource('guest', GuestController::class);
+	Route::get('about', [GuestController::class, 'about'])->name('about');
+	Route::get('contact', [GuestController::class, 'contact'])->name('contact');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Visitor routes
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['visitor', 'auth']], function(){
-	# Homepage
-	Route::get('guest/homepage', [HomepageController::class, 'guest_homepage'])->name('guest_homepage');
+	# Booknow
+	Route::resource('booknow', BooknowController::class);
 });
 
 /*
