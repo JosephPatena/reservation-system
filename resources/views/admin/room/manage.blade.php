@@ -38,17 +38,18 @@
           <div class="box box-widget widget-user-2">
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-primary">
-              <h3><b>{{ $room->room_no }}</b><i class="fa fa-edit" style="font-size: 12px; margin-left: 10px;"></i></h3>
+              Room
+              <h3><small style="color: #fff">No.</small><b>{{ $room->no }}</b><i class="fa fa-edit" style="font-size: 12px; margin-left: 10px;"></i></h3>
               <h5>{{ $room->name }}<i class="fa fa-edit" style="font-size: 12px; margin-left: 10px;"></i></h5>
             </div>
 
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="#">Reservation <span class="pull-right badge bg-aqua">31</span></a></li>
-                <li><a href="#">Check In <span class="pull-right badge bg-green">5</span></a></li>
-                <li><a href="#">Check Out <span class="pull-right badge bg-yellow">12</span></a></li>
-                <li><a href="#">Cancelled <span class="pull-right badge bg-red">842</span></a></li>
-                <li><a href="#" style="text-align: center;">View Reports</a></li>
+                <li><a>Reserved <span class="pull-right badge bg-aqua">{{ $room->reservation->where('status_id', 1)->count() }}</span></a></li>
+                <li><a>Check In <span class="pull-right badge bg-green">{{ $room->reservation->where('status_id', 2)->count() }}</span></a></li>
+                <li><a>Check Out <span class="pull-right badge bg-yellow">{{ $room->reservation->where('status_id', 3)->count() }}</span></a></li>
+                <li><a>Cancelled <span class="pull-right badge bg-red">{{ $room->reservation->where('status_id', 4)->count() }}</span></a></li>
+                <li><a href="{{ route('room_reports', $room->id) }}"><center>View Reports</center></a></li>
               </ul>
             </div>
           </div><!-- /.widget-user -->

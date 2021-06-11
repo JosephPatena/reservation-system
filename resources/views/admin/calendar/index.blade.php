@@ -169,7 +169,7 @@
               title: '{{ $reservation->status->name }}',
               start: new Date('{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("Y") }}', '{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("m")-1 }}', '{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("d") }}'),
               end: new Date('{{ \Carbon\Carbon::parse($reservation->departure_date)->format("Y") }}', '{{ \Carbon\Carbon::parse($reservation->departure_date)->format("m")-1 }}', '{{ \Carbon\Carbon::parse($reservation->departure_date)->format("d") }}'),
-              url: 'http://google.com/',
+              url: '{{ route('reports.show', $reservation->id) }}',
               backgroundColor: "{{ $reservation->status_id == 1 ? '#00c0ef' : ($reservation->status_id == 2 ? '#f56954' : ($reservation->status_id == 3 ? '#00a65a' : ($reservation->status_id == 4 ? '#f39c12' : ''))) }}",
               borderColor: "{{ $reservation->status_id == 1 ? '#00c0ef' : ($reservation->status_id == 2 ? '#f56954' : ($reservation->status_id == 3 ? '#00a65a' : ($reservation->status_id == 4 ? '#f39c12' : ''))) }}"
             },

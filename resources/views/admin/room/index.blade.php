@@ -179,8 +179,8 @@
             <!-- Add the bg color to the header using any of the bg-* classes -->
             <div class="widget-user-header bg-default">
             
-              <h3><small>Room <br> No.</small> <b>{{ $value->room_no }}</b></h3>
-              <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $value->id) }}" style="float: right; cursor: pointer;" title="View / Edit details"></i>
+              <h3><small>Room <br> No.</small> <b>{{ $value->no }}</b></h3>
+              <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $value->id) }}" style="float: right; cursor: pointer;" data-toggle="tooltip" title="View / Edit details"></i>
               <h5>{{ $value->name }}</h5>
             </div>
             <div id="carousel-example-generic-{{ $key }}" class="carousel slide" data-ride="carousel">
@@ -205,6 +205,11 @@
               <a class="right carousel-control" href="#carousel-example-generic-{{ $key }}" data-slide="next">
                 <span class="fa fa-angle-right"></span>
               </a>
+            </div>
+            <div class="box-footer no-padding">
+              <ul class="nav nav-stacked">
+                <li><a href="{{ route('guest', $value->id) }}"><center>View Reports</center></a></li>
+              </ul>
             </div>
           </div><!-- /.widget-user -->
         </div><!-- ./col -->

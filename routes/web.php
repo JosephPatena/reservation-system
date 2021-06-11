@@ -88,6 +88,8 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 
 	# Reports
 	Route::resource('reports', ReportsController::class);
+	Route::get('reports/guest/{id}', [ReportsController::class, 'guest'])->name('guest');
+	Route::get('reports/room/{id}', [ReportsController::class, 'room'])->name('room_reports');
 
 	# Calendar
 	Route::resource('calendar', CalendarController::class);

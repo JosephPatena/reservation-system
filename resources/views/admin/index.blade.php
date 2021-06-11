@@ -38,10 +38,10 @@
           <div class="small-box bg-aqua col-md-2">
             <div class="inner">
               No<h3>{{ $room->no }}</h3>
-            <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $room->id) }}" style="float: right; cursor: pointer;" title="View / Edit details"></i>
+            <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $room->id) }}" style="float: right; cursor: pointer;" data-toggle="tooltip" title="View / Edit details"></i>
               <p>{{ $room->accomodation->name }}</p>
             </div>
-            <a  href="#" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{{ route('room_reports', $room->id) }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         @endforeach
       </div>

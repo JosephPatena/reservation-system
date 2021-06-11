@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Reservation;
+use App\Models\Room;
+use App\Models\User;
 
 class ReportsController extends Controller
 {
@@ -13,7 +16,8 @@ class ReportsController extends Controller
      */
     public function index()
     {
-        return view('admin.reports.index');
+        $reservations = Reservation::latest()->get();
+        return view('admin.reports.index', compact('reservations'));
     }
 
     /**
@@ -45,7 +49,8 @@ class ReportsController extends Controller
      */
     public function show($id)
     {
-        //
+        $reservation = Reservation::findOrFail($id);
+        return view('admin.reports.manage', compact('reservation'));
     }
 
     /**
@@ -80,5 +85,17 @@ class ReportsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function guest($id){
+        $guest = User::findOrFail($id);
+        $reservations = Reservation::where('user_id', $id)->latest()->get();
+        return view('admin.reports.guest', compact('guest', 'reservations'));
+    }
+
+    public function room($id){
+        $room = Room::findOrFail($id);
+        $reservations = Reservation::where('room_id', $id)->latest()->get();
+        return view('admin.reports.room', compact('room', 'reservations'));
     }
 }
