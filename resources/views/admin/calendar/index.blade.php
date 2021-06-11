@@ -164,50 +164,17 @@
         },
         //Random default events
         events: [
-          {
-            title: 'All Day Event',
-            start: new Date(y, m, 1),
-            backgroundColor: "#f56954", //red
-            borderColor: "#f56954" //red
-          },
-          {
-            title: 'Long Event',
-            start: new Date(y, m, d - 5),
-            end: new Date(y, m, d - 2),
-            backgroundColor: "#f39c12", //yellow
-            borderColor: "#f39c12" //yellow
-          },
-          {
-            title: 'Meeting',
-            start: new Date(y, m, d, 10, 30),
-            allDay: false,
-            backgroundColor: "#0073b7", //Blue
-            borderColor: "#0073b7" //Blue
-          },
-          {
-            title: 'Lunch',
-            start: new Date(y, m, d, 12, 0),
-            end: new Date(y, m, d, 14, 0),
-            allDay: false,
-            backgroundColor: "#00c0ef", //Info (aqua)
-            borderColor: "#00c0ef" //Info (aqua)
-          },
-          {
-            title: 'Birthday Party',
-            start: new Date(y, m, d + 1, 19, 0),
-            end: new Date(y, m, d + 1, 22, 30),
-            allDay: false,
-            backgroundColor: "#00a65a", //Success (green)
-            borderColor: "#00a65a" //Success (green)
-          },
-          {
-            title: 'Click for Google',
-            start: new Date(y, m, 28),
-            end: new Date(y, m, 29),
-            url: 'http://google.com/',
-            backgroundColor: "#3c8dbc", //Primary (light-blue)
-            borderColor: "#3c8dbc" //Primary (light-blue)
-          }
+          @foreach($reservations as $reservation)
+            {
+              title: '{{ $reservation->status->name }}',
+              start: new Date('{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("Y") }}', '{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("m")-1 }}', '{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("d") }}'),
+              end: new Date('{{ \Carbon\Carbon::parse($reservation->departure_date)->format("Y") }}', '{{ \Carbon\Carbon::parse($reservation->departure_date)->format("m")-1 }}', '{{ \Carbon\Carbon::parse($reservation->departure_date)->format("d") }}'),
+              url: 'http://google.com/',
+              backgroundColor: "{{ $reservation->status_id == 1 ? '#00c0ef' : ($reservation->status_id == 2 ? '#f56954' : ($reservation->status_id == 3 ? '#00a65a' : ($reservation->status_id == 4 ? '#f39c12' : ''))) }}",
+              borderColor: "{{ $reservation->status_id == 1 ? '#00c0ef' : ($reservation->status_id == 2 ? '#f56954' : ($reservation->status_id == 3 ? '#00a65a' : ($reservation->status_id == 4 ? '#f39c12' : ''))) }}"
+            },
+          @endforeach
+          
         ],
         editable: true,
         droppable: true, // this allows things to be dropped onto the calendar !!!

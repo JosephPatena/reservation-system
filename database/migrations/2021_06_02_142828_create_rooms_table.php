@@ -24,6 +24,7 @@ class CreateRoomsTable extends Migration
             $table->integer('no_of_room');
             $table->integer('max_length_stay');
             $table->boolean('is_available')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

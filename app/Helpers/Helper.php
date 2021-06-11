@@ -6,6 +6,7 @@ use App\Models\PaymentMethod;
 use App\Models\OwnerCurrency;
 use App\Models\Accomodation;
 use App\Models\Image;
+use Carbon\Carbon;
 use Auth;
 
 class Helper
@@ -24,5 +25,9 @@ class Helper
 
 	public static function get_owner_currency(){
 		return OwnerCurrency::first();
+	}
+
+	public static function check_availability($room){
+		
 	}
 }

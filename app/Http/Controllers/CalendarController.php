@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Reservation;
 
 class CalendarController extends Controller
 {
     public function index(){
-        return view('admin.calendar.index');
+        $reservations = Reservation::all();
+        return view('admin.calendar.index', compact('reservations'));
     }
 }
