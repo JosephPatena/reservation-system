@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>LuxuryHotel a Hotel Template</title>
+    <title>Reservation System | RS</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -17,6 +17,12 @@
 
     <!-- Theme Style -->
     <link rel="stylesheet" href="{{ asset('guest/css/style.css') }}">
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    @yield('stylesheets')
+    @toastr_css
   </head>
   <body>
     
@@ -24,36 +30,49 @@
      
       <nav class="navbar navbar-expand-md navbar-dark bg-light">
         <div class="container">
-          <a class="navbar-brand" href="/">LuxuryHotel</a>
+          <a class="navbar-brand" href="/">Reservation System | RS</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
 
           <div class="collapse navbar-collapse navbar-light" id="navbarsExample05">
             <ul class="navbar-nav ml-auto pl-lg-5 pl-0">
+              
               <li class="nav-item">
                 <a class="nav-link active" href="/">Home</a>
               </li>
+              
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="rooms.html" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rooms</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown04">
-                  <a class="dropdown-item" href="{{ route('room.index') }}">Room Videos</a>
-                  <a class="dropdown-item" href="{{ route('room.index') }}">Presidential Room</a>
-                  <a class="dropdown-item" href="{{ route('room.index') }}">Luxury Room</a>
-                  <a class="dropdown-item" href="{{ route('room.index') }}">Deluxe Room</a>
+                <a class="nav-link dropdown-toggle" href="#" id="rooms" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rooms</a>
+                <div class="dropdown-menu" aria-labelledby="rooms">
+                  <a class="dropdown-item" href="{{ route('room') }}">All</a>
+                  @foreach(Helper::get_accomodation() as $accomodation)
+                    <a class="dropdown-item" href="{{ route('room_type', $accomodation->id) }}">{{ $accomodation->name }}</a>
+                  @endforeach
                 </div>
-
               </li>
+              
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('about') }}">About</a>
               </li>
+              
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('contact') }}">Contact</a>
               </li>
 
-               <li class="nav-item cta">
-                <a class="nav-link" href="{{ route('booknow.create') }}"><span>Book Now</span></a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="account" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+                <div class="dropdown-menu" aria-labelledby="account">
+                  <a class="dropdown-item" href="{{ route('room') }}">My Profile</a>
+                  <a class="dropdown-item" href="{{ route('room') }}">My Reservation</a>
+                  <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                </div>
               </li>
+
+              <li class="nav-item cta">
+                <a class="nav-link" href="{{ route('reservation.create') }}"><span>Book Now</span></a>
+              </li>
+
             </ul>
             
           </div>
@@ -121,5 +140,72 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="{{ asset('guest/js/magnific-popup-options.js') }}"></script>
 
     <script src="{{ asset('guest/js/main.js') }}"></script>
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+    <script type="text/javascript">
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+          },
+          cache: false,
+      });
+
+      $('#demo').daterangepicker({
+          "showISOWeekNumbers": true,
+          "timePicker": true,
+          "autoUpdateInput": true,
+          "locale": {
+              "cancelLabel": 'Clear',
+              "format": "MMMM DD, YYYY h:mm A",
+              "separator": " - ",
+              "applyLabel": "Apply",
+              "cancelLabel": "Cancel",
+              "fromLabel": "From",
+              "toLabel": "To",
+              "customRangeLabel": "Custom",
+              "weekLabel": "W",
+              "daysOfWeek": [
+                  "Su",
+                  "Mo",
+                  "Tu",
+                  "We",
+                  "Th",
+                  "Fr",
+                  "Sa"
+              ],
+              "monthNames": [
+                  "January",
+                  "February",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December"
+              ],
+              "firstDay": 1
+          },
+          "linkedCalendars": true,
+          "showCustomRangeLabel": false,
+          "startDate": 1,
+          "opens": "center"
+      });
+
+      $(document).on('click', '.open-url', function(){
+        let url = $(this).data('url')
+        window.open(url, "_self")
+      })
+    </script>
+
+    @yield('scripts')
+    @toastr_js
+    @toastr_render
   </body>
 </html>

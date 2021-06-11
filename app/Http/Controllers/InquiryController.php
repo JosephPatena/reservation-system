@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class BooknowController extends Controller
+class InquiryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ class BooknowController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.inquiries.index');
     }
 
     /**
@@ -23,7 +23,7 @@ class BooknowController extends Controller
      */
     public function create()
     {
-        return view('guest.booknow');
+        //
     }
 
     /**
