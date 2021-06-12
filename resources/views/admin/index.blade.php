@@ -58,10 +58,10 @@
                     <td><span class="label bg-aqua">Reserved</span></td>
                   </tr>
                   <tr>
-                    <td><span class="label bg-green">Checked In</span></td>
+                    <td><span class="label bg-green">Check In</span></td>
                   </tr>
                   <tr>
-                    <td><span class="label bg-yellow">Checked Out</span></td>
+                    <td><span class="label bg-yellow">Check Out</span></td>
                   </tr>
                   <tr>
                     <td><span class="label bg-red">Cancelled</span></td>

@@ -303,6 +303,13 @@
       }
       setInterval(checkIfOnline, 1000);
 
+
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+          },
+          cache: false,
+      });
     </script>
 
     @toastr_js

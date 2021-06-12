@@ -73,15 +73,20 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 
 	# Room
 	Route::resource('rooms', RoomController::class);
+	Route::post('store-image', [RoomController::class, 'store_image'])->name('store_image');
+	Route::post('delete-image', [RoomController::class, 'delete_image'])->name('delete_image');
 
 	# Accomodation
 	Route::resource('accomodation', AccomodationController::class);
 
 	# Billing
 	Route::resource('billing', BillingController::class);
+	Route::post('enable_disable_billing', [BillingController::class, 'enable_disable_billing'])->name('enable_disable_billing');
 
 	# Guest
 	Route::get('guests', [GuestController::class, 'guests'])->name('guests');
+	Route::get('restrict-user/{id}', [GuestController::class, 'restrict_user'])->name('restrict_user');
+	Route::get('unrestrict-user/{id}', [GuestController::class, 'unrestrict_user'])->name('unrestrict_user');
 
 	# Inquiries
 	Route::resource('inquiries', InquiryController::class);
@@ -110,8 +115,8 @@ Route::group(['middleware' => ['unauthenticated_or_visitor']], function(){
 	Route::get('contact', [GuestController::class, 'contact'])->name('contact');
 
 	# Room
-	Route::get('room/type/{accomodation_id}', [AccomodationController::class, 'room_type'])->name('room_type');
-	Route::get('room', [AccomodationController::class, 'room'])->name('room');
+	Route::get('room/type/{accomodation_id}', [RoomController::class, 'room_type'])->name('room_type');
+	Route::get('room', [RoomController::class, 'room'])->name('room');
 });
 
 /*
@@ -119,13 +124,13 @@ Route::group(['middleware' => ['unauthenticated_or_visitor']], function(){
 | Visitor routes
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => ['visitor', 'auth']], function(){
+Route::group(['middleware' => ['visitor', 'auth', 'restriction']], function(){
 	# Reservation
 	Route::resource('reservation', ReservationController::class);
 	Route::get('reservation/create/{id}', [ReservationController::class, 'create'])->name('reservation_create');
 	Route::post('check-availability', [ReservationController::class, 'check_availability'])->name('check_availability');
 
-	# Checkout
+	# CHECKOUT #
 	# PayPal
 	Route::post('checkout/api/paypal/order/create', [PayPalController::class, 'create_order'])->name('paypal.create_order');
 	Route::post('checkout/api/paypal/order/capture/{order_id}', [PayPalController::class, 'capture_order'])->name('paypal.capture_order');

@@ -93,7 +93,7 @@
                     <div class="form-group">
                       <label for="inputRoomNo" class="col-sm-2 control-label">Room No <span style="color: red;">*</span></label>
                       <div class="col-sm-10">
-                        <input name="room_no" type="text" class="form-control" id="inputRoomNo" placeholder="Room No" required="" value="{{ old('room_no') }}">
+                        <input name="no" type="text" class="form-control" id="inputRoomNo" placeholder="Room No" required="" value="{{ old('no') }}">
                       </div>
                     </div> 
                     
@@ -140,6 +140,13 @@
                       <label for="inputNoRoom" class="col-sm-2 control-label">No. of Room <span style="color: red;">*</span></label>
                       <div class="col-sm-10">
                         <input name="no_of_room" type="number" class="form-control" id="inputNoRoom" placeholder="No. of Room" required="" value="{{ old('no_of_room') }}">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="inputMax" class="col-sm-2 control-label">Max length of Stay (day) <span style="color: red;">*</span></label>
+                      <div class="col-sm-10">
+                        <input name="max_length_stay" type="number" class="form-control" id="inputMax" placeholder="No. of Room" required="" value="{{ old('max_length_stay') }}">
                       </div>
                     </div>
 
@@ -208,7 +215,7 @@
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="{{ route('guest', $value->id) }}"><center>View Reports</center></a></li>
+                <li><a href="{{ route('room_reports', $value->id) }}"><center>View Reports</center></a></li>
               </ul>
             </div>
           </div><!-- /.widget-user -->
@@ -259,7 +266,7 @@
 
         var total_file=document.getElementById("fileUpload").files.length;
         for(var i=0;i<total_file;i++){
-            $('#photos-preview').append("<img style='width:50px; height:50px; cursor: pointer;' src='"+URL.createObjectURL(event.target.files[i])+"'>&nbsp;");
+            $('#photos-preview').append("<img style='width:50px; height:50px; cursor: pointer; border-radius: 5px' src='"+URL.createObjectURL(event.target.files[i])+"'>&nbsp;");
         }
     })
   </script>

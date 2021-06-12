@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Models\PaymentMethod;
 use App\Models\OwnerCurrency;
 use App\Models\Accomodation;
+use App\Models\Reservation;
 use App\Models\Image;
 use Carbon\Carbon;
 use Auth;
@@ -29,5 +30,9 @@ class Helper
 
 	public static function check_availability($room){
 		
+	}
+
+	public static function get_reservation(){
+		return Reservation::get();
 	}
 }

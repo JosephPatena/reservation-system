@@ -32,32 +32,74 @@
   <!-- Main content -->
   <section class="content">
     <div class="row">
-      <div class="col-xs-8">
+      <div class="col-xs-12">
           <!-- Guest -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
+          <div class="box">
+            <div class="box-header">
               <h3 class="box-title">List</h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
             </div><!-- /.box-header -->
             <div class="box-body">
-              <ul class="products-list product-list-in-box">
-                @foreach($guest as $value)
-                  <li class="item">
-                    <div class="product-img">
-                      <img src="{{ !empty($value->image->hash_name) ? url('storage/image/'.$value->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="Guest Image">
-                    </div>
-                    <div class="product-info">
-                      <a href="javascript::;" class="product-title">{{ $value->name }}<span class="label label-success pull-right">Active</span></a>
-                      <span class="product-description">
-                        Description
-                      </span>
-                    </div>
-                  </li><!-- /.item -->
-                @endforeach
-              </ul>
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Date Registered</th>
+                    <th>Access</th>
+                    <th>Reserved</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Cancelled</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($guest as $key => $guest)
+                    <tr>
+                      <td>{{ $key+1 }}.</td>
+                      <td>
+                        <img style="width: 25px; height: 25px; cursor: pointer;" src="{{ !empty($guest->image->hash_name) ? url('storage/image/'.$guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="Guest Image">
+                      </td>
+                      <td>{{ $guest->name }}</td>
+                      <td>{{ $guest->email }}</td>
+                      <td>{{ $guest->phone }}</td>
+                      <td>{{ \Carbon\Carbon::parse($guest->created_at)->format('F d Y h:i A') }}</td>
+                      <td>
+                        @if($guest->restricted)
+                          <span class="badge bg-red">Restricted</span>
+                        @else
+                          <span class="badge bg-green">Unrestricted</span>
+                        @endif
+                      </td>
+                      <td>{{ $guest->reservation->where('status_id', 1)->count() }}</td>
+                      <td>{{ $guest->reservation->where('status_id', 2)->count() }}</td>
+                      <td>{{ $guest->reservation->where('status_id', 3)->count() }}</td>
+                      <td>{{ $guest->reservation->where('status_id', 4)->count() }}</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-primary btn-sm">Action</button>
+                          <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ route('guest', $guest->id) }}">View Reports</a></li>
+                            @if($guest->restricted)
+                              <li><a href="{{ route('unrestrict_user', encrypt($guest->id)) }}">Unrestrict Access</a></li>
+                            @else
+                              <li><a href="{{ route('restrict_user', encrypt($guest->id)) }}">Restrict Access</a></li>
+                            @endif
+                            
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
       </div>
@@ -96,5 +138,23 @@
         "autoWidth": false
       });
     });
+
+    $('.restrict').on('click', function(evt){
+      evt.preventDefault()
+      let check = confirm("Are you sure you want to restrict this user?")
+      if (check) {
+        $(this).unbind('click')
+        evt.currentTarget.click();
+      }
+    })
+
+    $('.unrestrict').on('click', function(evt){
+      evt.preventDefault()
+      let check = confirm("Are you sure you want to unrestrict this user?")
+      if (check) {
+        $(this).unbind('click')
+        evt.currentTarget.click();
+      }
+    })
   </script>
 @endsection

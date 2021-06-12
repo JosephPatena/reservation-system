@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminAuthentication::class,
         'visitor' => \App\Http\Middleware\VisitorAuthentication::class,
         'unauthenticated_or_visitor'=> \App\Http\Middleware\UnauthenticatedOrVisitor::class,
+        'restriction' => \App\Http\Middleware\Restriction::class,
     ];
 }

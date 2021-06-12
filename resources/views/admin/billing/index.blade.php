@@ -91,7 +91,7 @@
                   <label class="col-sm-2 control-label">Available</label>
                   <div class="col-sm-6">
                       <label class="toggle">
-                          <input class="toggle__input" name="is_available" type="checkbox" {{ $payment_method[0]->is_available ? "checked" : "" }}>
+                          <input class="toggle__input" name="is_available" data-id="1" type="checkbox" {{ $payment_method[0]->is_available ? "checked" : "" }}>
                           <div class="toggle__fill"></div>
                       </label>
                   </div>
@@ -121,7 +121,7 @@
                     <label class="col-sm-2 control-label">Available</label>
                     <div class="col-sm-6">
                         <label class="toggle">
-                            <input class="toggle__input" name="is_available" type="checkbox" {{ $payment_method[1]->is_available ? "checked" : "" }}>
+                            <input class="toggle__input" name="is_available" data-id="2" type="checkbox" {{ $payment_method[1]->is_available ? "checked" : "" }}>
                             <div class="toggle__fill"></div>
                         </label>
                     </div>
@@ -173,7 +173,7 @@
                     <label class="col-sm-2 control-label">Available</label>
                     <div class="col-sm-6">
                         <label class="toggle">
-                            <input class="toggle__input" name="is_available" type="checkbox" {{ $payment_method[2]->is_available ? "checked" : "" }}>
+                            <input class="toggle__input" name="is_available" data-id="3" type="checkbox" {{ $payment_method[2]->is_available ? "checked" : "" }}>
                             <div class="toggle__fill"></div>
                         </label>
                     </div>
@@ -225,7 +225,7 @@
                     <label class="col-sm-2 control-label">Available</label>
                     <div class="col-sm-6">
                         <label class="toggle">
-                            <input class="toggle__input" name="is_available" type="checkbox" {{ $payment_method[3]->is_available ? "checked" : "" }}>
+                            <input class="toggle__input" name="is_available" data-id="4" type="checkbox" {{ $payment_method[3]->is_available ? "checked" : "" }}>
                             <div class="toggle__fill"></div>
                         </label>
                     </div>
@@ -323,6 +323,7 @@
   <!-- page script -->
   <script>
     $(function () {
+
       $("#example1").DataTable();
       $('#example2').DataTable({
         "paging": true,
@@ -333,5 +334,20 @@
         "autoWidth": false
       });
     });
+
+    $('.toggle__input').on('click', function(){
+      $.ajax({
+        url: '{{ route('enable_disable_billing') }}',
+        type: 'post',
+        dataType: 'json',
+        data: {id: $(this).data('id'), status: $(this).is(':checked')}
+      })
+      .done(function(){
+        toastr.success("Success")
+      })
+      .fail(function(){
+        toastr.error("Failed! Something went wrong")
+      })
+    })
   </script>
 @endsection

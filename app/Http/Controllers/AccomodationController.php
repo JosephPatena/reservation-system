@@ -86,16 +86,4 @@ class AccomodationController extends Controller
     {
         //
     }
-
-    public function room_type($accomodation_id)
-    {
-        $rooms = Room::where('accomodation_id', $accomodation_id)->get();
-        return view('guest.room', compact('rooms'));
-    }
-
-    public function room()
-    {
-        $rooms = Room::all();
-        return view('guest.room', compact('rooms'));
-    }
 }

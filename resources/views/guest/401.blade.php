@@ -22,31 +22,14 @@
     <section class="site-section">
       <div class="container">
         <div class="row">
-          @foreach($rooms as $room)
-            <div class="col-md-4 mb-4">
-              <div class="media d-block room mb-0">
-                <figure>
-                  <img src="{{ url('storage/image/'.$room->images->first()->hash_name) }}" alt="Room Image" class="img-fluid">
-                  <div class="overlap-text">
-                    <span>
-                      <span class="ion-ios-star"></span>
-                      <span class="ion-ios-star"></span>
-                      <span class="ion-ios-star"></span>
-                    </span>
-                  </div>
-                </figure>
-                <div class="media-body">
-                  <h3 class="mt-0"><a href="{{ route('room_type', $room->accomodation_id) }}">{{ $room->accomodation->name }}</a></h3>
-                  <ul class="room-specs">
-                    <li><span class="ion-ios-people-outline"></span> {{ $room->no_of_person }} Guests</li>
-                    <li><span class="ion-ios-bed-outline"></span> {{ $room->no_of_room }} Room</li>
-                  </ul>
-                  {!! $room->description !!}
-                  <p><a href="{{ route('reservation_create', $room->id) }}" class="btn btn-primary btn-sm" {{ !$room->is_available ? "disabled" : "" }}>Book Now From {{ Helper::get_owner_currency()->currency->symbol . number_format($room->price, 2) }}</a></p>
-                </div>
-              </div>
+          <div class="col-md-12 mb-4">
+            <div class="mb-5 element-animate" style="text-align: center;">
+              <h1>401 Unathorized Access</h1>
+              <p>Oops! The page you requested is not available at the moment.</p>
+              <p>Please contact our support team or use the inquiry form for your concerns.</p>
+              <p><a href="{{ route('contact') }}" class="btn btn-primary">Contact Us</a></p>
             </div>
-          @endforeach
+          </div>
         </div>
       </div>
     </section>

@@ -25,19 +25,19 @@ class PaymentMethodSeeder extends Seeder
         ]);
 
         \App\Models\PaymentMethod::create([
-            'name' => 'Pay with PayPal',
+            'name' => 'Pay via PayPal',
             'description' => "When you click 'Place Order' below we'll take you to PayPal's site to set up your billing information.",
             'is_available' => false
         ]);
 
         \App\Models\PaymentMethod::create([
-            'name' => 'Pay with Stripe',
+            'name' => 'Pay via Stripe',
             'description' => "When you click 'Place Order' below we'll take you to Stripe's site to set up your billing information.",
             'is_available' => false
         ]);
 
         \App\Models\PaymentMethod::create([
-            'name' => 'pay with PayMaya',
+            'name' => 'pay via PayMaya',
             'description' => "When you click 'Place Order' below we'll take you to PayMaya's site to set up your billing information.",
             'is_available' => false
         ]);

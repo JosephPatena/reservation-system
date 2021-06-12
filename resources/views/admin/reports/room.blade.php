@@ -32,7 +32,7 @@
   <!-- Main content -->
   <section class="content">
 		<div class="row">
-			<div class="col-lg-4 col-md-4">
+			<div class="col-lg-3 col-md-4">
         <!-- Widget: user widget style 1 -->
         <div class="box box-widget widget-user-2">
           <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -75,11 +75,11 @@
           </div>
         </div><!-- /.widget-user -->
 			</div>
-		  <div class="col-lg-8 col-md-8">
+		  <div class="col-lg-9 col-md-8">
 
 		      <div class="box">
 		        <div class="box-header">
-		          <h3 class="box-title">Reservations</h3>
+		          <h3 class="box-title">Booking History</h3>
 		        </div><!-- /.box-header -->
 		        <div class="box-body">
 		          <table id="example1" class="table table-bordered table-striped">
@@ -93,6 +93,7 @@
 		                <th>Length of Stay (day)</th>
                     <th>Guest</th>
 		                <th>Total</th>
+                    <th>Status</th>
                     <th>Action</th>
 		              </tr>
 		            </thead>
@@ -109,6 +110,17 @@
                         <img class="open-url" data-url="{{ route('guest', $reservation->guest->id) }}" data-toggle="tooltip" title="View Reports" style="width: 25px; height: 25px; cursor: pointer;" src="{{ !empty($reservation->guest->image->hash_name) ? url('storage/image/'.$reservation->guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="Guest Image">&nbsp;&nbsp;<a href="{{ route('guest', $reservation->guest->id) }}"  data-toggle="tooltip" title="View Reports">{{ $reservation->guest->name }}</a>
                       </td>
 		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
+                      <td>
+                        @if($reservation->status_id == 1)
+                          <span class="badge bg-aqua">{{ $reservation->status->name }}</span>
+                        @elseif($reservation->status_id == 2)
+                          <span class="badge bg-red">{{ $reservation->status->name }}</span>
+                        @elseif($reservation->status_id == 3)
+                          <span class="badge bg-green">{{ $reservation->status->name }}</span>
+                        @else
+                          <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
+                        @endif
+                      </td>
                       <td><button class="btn btn-primary btn-sm open-url" data-url="{{ route('reports.show', $reservation->id) }}" data-toggle="tooltip" title="Show Details"><i class="fa fa-folder-open-o"></i></button></td>
 		            		</tr>
                     @endforeach

@@ -21,8 +21,8 @@ class StatusSeeder extends Seeder
         $statuses = [
             'Reserved',
             'Cancelled',
-            'Checked In',
-            'Checked Out'
+            'Check In',
+            'Check Out'
         ];
         foreach ($statuses as $key => $value) {
             \App\Models\Status::create(['name' => $value]);

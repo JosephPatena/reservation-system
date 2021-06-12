@@ -38,7 +38,7 @@ class ReservationController extends Controller
         }
         else
         {
-            $room = Room::inRandomOrder()->first();
+            $room = Room::where('is_available', true)->inRandomOrder()->first();
         }
         return view('guest.booknow', compact('room'));
     }
@@ -91,6 +91,10 @@ class ReservationController extends Controller
 
         $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $arrival_date);
         $end_date = Carbon::createFromFormat('Y-m-d H:i:s', $departure_date);
+
+        if (!Room::findOrFail(decrypt($request->room_id))->is_available) {
+            return response()->json(['status' => false, 'message' => 'The room is under maintenance.']);
+        }
 
         if (Room::findOrFail(decrypt($request->room_id))->max_length_stay < ($start_date->diffInDays($end_date)+1)) {
             return response()->json(['status' => false, 'message' => 'You cannot choose higher than the max length of stay.']);

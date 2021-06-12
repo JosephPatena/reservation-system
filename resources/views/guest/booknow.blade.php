@@ -1,5 +1,60 @@
 @extends('layout.guest')
 
+@section('stylesheets')
+  <style type="text/css">
+    [type="radio"]:checked,
+    [type="radio"]:not(:checked) {
+      position: absolute;
+      left: -9999px;
+    }
+    [type="radio"]:checked + label,
+    [type="radio"]:not(:checked) + label {
+      position: relative;
+      padding-left: 28px;
+      cursor: pointer;
+      line-height: 20px;
+      display: inline-block;
+      color: #666;
+    }
+    [type="radio"]:checked + label:before,
+    [type="radio"]:not(:checked) + label:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 18px;
+      height: 18px;
+      border: 1px solid #ddd;
+      border-radius: 100%;
+      background: #fff;
+    }
+    [type="radio"]:checked + label:after,
+    [type="radio"]:not(:checked) + label:after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      background: #d2b55b;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border-radius: 100%;
+      -webkit-transition: all 0.2s ease;
+      transition: all 0.2s ease;
+    }
+    [type="radio"]:not(:checked) + label:after {
+      opacity: 0;
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    }
+    [type="radio"]:checked + label:after {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+
+  </style>
+@endsection
+
 @section('content')
 	
 	<section class="site-hero site-hero-innerpage overlay" data-stellar-background-ratio="0.5" style="background-image: url(/guest/images/big_image_1.jpg);">
@@ -63,15 +118,18 @@
               </div>
 
               <div class="row">
-                <div class="col-md-12 col-sm-12 form-group row">
+                <div class="col-md-12 col-sm-12">
                   @foreach(Helper::get_payment_method() as $key => $payment_method)
-                    <div class="col-md-1 col-sm-1">
-                      <input style="cursor: pointer;" type="radio" id="option-{{ $key }}" name="payment_method_id" value="{{ encrypt($payment_method->id) }}" required="">
-                    </div>
-                    <div class="col-md-11 col-sm-11">
-                      <label style="cursor: pointer; line-height: 0;" for="option-{{ $key }}"><b>{{ $payment_method->name }}</b></label><br>
-                      <small style="font-weight: lighter;">{{ $payment_method->description }}</small><br>
-                    </div>
+                  <p>
+                    <input type="radio" id="option-{{ $key }}" name="payment_method_id" value="{{ encrypt($payment_method->id) }}" required="" {{ !$payment_method->is_available ? "disabled" : "" }}>
+                    <label for="option-{{ $key }}">
+                      <b style="font-weight: bold;">{{ $payment_method->name }}</b><br>
+                      {{ $payment_method->description }}
+                      @if(!$payment_method->is_available)
+                        <br><span style="color: #d2b55b">Not available a the moment.</span>
+                      @endif
+                    </label>
+                  </p>
                   @endforeach
                 </div>
               </div>
