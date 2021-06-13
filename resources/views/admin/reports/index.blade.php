@@ -43,7 +43,7 @@
           <div class="icon">
             <i class="fa fa-star"></i>
           </div>
-          <a href="{{ route('rooms.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('rooms.index') }}" class="small-box-footer">View Rooms <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
 
@@ -113,7 +113,7 @@
           <div class="icon">
             <i class="fa fa-users"></i>
           </div>
-          <a href="{{ route('guests') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('guests') }}" class="small-box-footer">View Guests <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
 
@@ -149,6 +149,9 @@
 		      <div class="box">
 		        <div class="box-header">
 		          <h3 class="box-title">Booking History</h3>
+              <span class="pull-right">
+                <label>Showing: </label> {{ Session::has('date_range') ? Session::get('date_range') : "All" }}
+              </span>
 		        </div><!-- /.box-header -->
 		        <div class="box-body table-responsive">
 		          <table id="example1" class="table table-bordered table-striped">
@@ -165,6 +168,7 @@
 		                <th>Guest</th>
 		                <th>Total</th>
 		                <th>Status</th>
+                    <th>Payment Method</th>
 		                <th style="width: 10px !important">Action</th>
 		              </tr>
 		            </thead>
@@ -196,6 +200,7 @@
                           <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
                         @endif
                       </td>
+                      <td>{{ $reservation->payment_method->name }}</td>
 		            			<td><button class="btn btn-primary btn-sm open-url" data-url="{{ route('reports.show', $reservation->id) }}" data-toggle="tooltip" title="Show Details"><i class="fa fa-folder-open-o"></i></button></td>
 		            		</tr>
 		            	@endforeach
@@ -289,7 +294,7 @@
       });
     });
 
-    $('#date_range').daterangepicker().on('changeDate', function(){
+    $('#date_range').on('apply.daterangepicker', function(){
       $.ajax({
         url: '{{ route('set_date_range') }}',
         data: {date_range: $(this).val()},

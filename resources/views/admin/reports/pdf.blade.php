@@ -61,6 +61,7 @@
                     <th>Guest</th>
                     <th>Total</th>
                     <th>Status</th>
+                    <th>Payment Method</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,14 +73,14 @@
                             {{ $reservation->room->name }}
                         </td>
                         <td>{{ $reservation->room->accomodation->name }}</td>
-                        <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->room->price, 2) }}</td>
+                        <td>{{ Helper::get_owner_currency()->currency->iso_code ." ". number_format($reservation->room->price, 2) }}</td>
                         <td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>
                         <td>{{ \Carbon\Carbon::parse($reservation->departure_date)->format("F d, Y h:i A") }}</td>
                         <td>{{ $reservation->length_of_stay }}</td>
                         <td>
                             {{ $reservation->guest->name }}
                         </td>
-                        <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
+                        <td>{{ Helper::get_owner_currency()->currency->iso_code ." ". number_format($reservation->total, 2) }}</td>
                         <td>
                             @if($reservation->status_id == 1)
                               <span class="badge bg-aqua">{{ $reservation->status->name }}</span>
@@ -91,6 +92,7 @@
                               <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
                             @endif
                         </td>
+                        <td>{{ $reservation->payment_method->name }}</td>
                     </tr>
                 @endforeach
             </tbody>

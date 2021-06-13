@@ -74,7 +74,6 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
 	Route::post('update_profile', [ProfileController::class, 'update_profile'])->name('update_profile');
 	
-
 	# Homepage
 	Route::get('admin/homepage', [HomepageController::class, 'admin_homepage'])->name('admin_homepage');
 
@@ -112,6 +111,10 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	# Reservation
 	Route::get('manage/reservation', [ReservationController::class, 'manage_reservation'])->name('manage_reservation');
 	Route::post('set-status', [ReservationController::class, 'set_status'])->name('set_status');
+
+	# Notification
+	Route::post('seen-notif', [ProfileController::class, 'seen_notif'])->name('seen_notif');
+	
 
 });
 

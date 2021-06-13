@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Models\Reservation;
+use App\Models\Inquiry;
 use App\Models\Image;
 use App\Models\User;
 use Auth;
@@ -76,5 +78,15 @@ class ProfileController extends Controller
 
         toastr()->success("Profile updated successfully");
         return redirect()->back();
+    }
+
+    public function seen_notif(Request $request){
+        if ($request->type == "reservation") {
+            Reservation::where('seen', false)->update(['seen' => true]);
+        }else{
+            Inquiry::where('seen', false)->update(['seen' => true]);
+        }
+
+        return response()->json(true);
     }
 }

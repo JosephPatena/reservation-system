@@ -24,7 +24,7 @@
       <small>Dashboard</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-newspaper-o"></i>Reservation</a></li>
+      <li><a href="#"><i class="fa fa-bookmark"></i>Reservation</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>
@@ -51,13 +51,18 @@
                     <th>Departure Date</th>
                     <th>Length of Stay (day)</th>
                     <th>Guest</th>
-                    <th>Status</th>
                     <th>Total</th>
+                    <th>Status</th>
+                    <th>Payment Method</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   @foreach($reservations as $key => $reservation)
+                    @php
+                      $reservation->seen = true;
+                      $reservation->save();
+                    @endphp
                     <tr>
                       <td>{{ $key+1 }}.</td>
                       <td>{{ $reservation->invoice_no }}</td>
@@ -84,6 +89,7 @@
                           <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
                         @endif
                       </td>
+                      <td>{{ $reservation->payment_method->name }}</td>
                       <td>
                         <div class="btn-group">
                           <button class="btn btn-primary btn-sm open-url" data-url="{{ route('reports.show', $reservation->id) }}" data-toggle="tooltip" title="Show Details"><i class="fa fa-folder-open-o"></i></button>

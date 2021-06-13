@@ -25,7 +25,7 @@
       <small>Dashboard</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-calendar"></i> Overview</a></li>
+      <li><a href="#"><i class="fa fa-home"></i> Overview</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>

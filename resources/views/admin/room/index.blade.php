@@ -123,9 +123,9 @@
                     </div>
 
                     <div class="form-group">
-                      <label for="inputNoPerson" class="col-sm-2 control-label">No. of Person <span style="color: red;">*</span></label>
+                      <label for="inputNoPerson" class="col-sm-2 control-label">Max Guest <span style="color: red;">*</span></label>
                       <div class="col-sm-10">
-                        <input name="no_of_person" type="number" class="form-control" id="inputNoPerson" placeholder="No. of Person" required="" value="{{ old('no_of_person') }}">
+                        <input name="max_guest" type="number" class="form-control" id="inputNoPerson" placeholder="No. of Person" required="" value="{{ old('max_guest') }}">
                       </div>
                     </div>
 

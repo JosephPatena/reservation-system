@@ -95,6 +95,7 @@
                     <th>Guest</th>
 		                <th>Total</th>
                     <th>Status</th>
+                    <th>Payment Method</th>
                     <th>Action</th>
 		              </tr>
 		            </thead>
@@ -123,6 +124,7 @@
                           <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
                         @endif
                       </td>
+                      <td>{{ $reservation->payment_method->name }}</td>
                       <td><button class="btn btn-primary btn-sm open-url" data-url="{{ route('reports.show', $reservation->id) }}" data-toggle="tooltip" title="Show Details"><i class="fa fa-folder-open-o"></i></button></td>
 		            		</tr>
                     @endforeach

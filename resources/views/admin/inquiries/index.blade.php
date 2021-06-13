@@ -35,6 +35,10 @@
       <div class="col-xs-8">
         <!-- Chat box -->
         @foreach($inquiries as $value)
+          @php
+            $value->seen = true;
+            $value->save();
+          @endphp
           <div class="box box-success">
             <div class="box-header">
               <i class="fa fa-comment-o"></i>

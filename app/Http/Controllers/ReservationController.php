@@ -124,7 +124,7 @@ class ReservationController extends Controller
         $end_date = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date_range[1])->format('Y-m-d H:i:s'));
 
         $new = Reservation::create([
-            'invoice_no' => date("siHymd"),
+            'invoice_no' => "TRN".date("siHymd"),
             'user_id' => Auth::id(),
             'room_id' => decrypt(Session::get('room_id')),
             'payment_method_id' => decrypt(Session::get('payment_method_id')),

@@ -51,6 +51,7 @@
 		                <th>Length of Stay (day)</th>
 		                <th>Total</th>
                     <th>Status</th>
+                    <th>Payment Method</th>
 		              </tr>
 		            </thead>
 		            <tbody>
@@ -73,6 +74,7 @@
                           <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
                         @endif
                       </td>
+                      <td>{{ $reservation->payment_method->name }}</td>
 		            		</tr>
 		            </tbody>
 		          </table>

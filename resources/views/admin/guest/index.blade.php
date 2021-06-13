@@ -24,7 +24,7 @@
       <small>Dashboard</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Guest</a></li>
+      <li><a href="#"><i class="fa fa-users"></i> Guest</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>

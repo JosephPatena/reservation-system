@@ -43,15 +43,17 @@
             <ul class="nav navbar-nav">
               <!-- Messages: style can be found in dropdown.less-->
               <li class="dropdown messages-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="dropdown-toggle seen-notif" data-type="inquiries" data-toggle="dropdown">
                   <i class="fa fa-comment-o"></i>
                   @if(Helper::get_inquiries()->where('seen', false)->count() > 0)
                     <span class="label label-success">{{ Helper::get_inquiries()->where('seen', false)->count() }}</span>
                   @endif
                 </a>
-                @if(Helper::get_inquiries()->where('seen', false)->count() > 0)
+                @if((Helper::get_inquiries()->where('seen', false)->count() > 0) || (Helper::get_inquiries()->where('seen', true)->count() > 0))
                   <ul class="dropdown-menu">
-                    <li class="header">You have {{ Helper::get_inquiries()->where('seen', false)->count() }} inquiries</li>
+                    @if(Helper::get_inquiries()->where('seen', false)->count() > 0)
+                      <li class="header">You have {{ Helper::get_inquiries()->where('seen', false)->count() }} inquiries</li>
+                    @endif
                     <li>
                       <!-- inner menu: contains the actual data -->
                       <ul class="menu">
@@ -92,15 +94,17 @@
               </li>
               <!-- Notifications: style can be found in dropdown.less -->
               <li class="dropdown notifications-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="dropdown-toggle seen-notif" data-type="reservation" data-toggle="dropdown">
                   <i class="fa fa-bookmark-o"></i>
                   @if(Helper::get_reservation()->where('seen', false)->count() > 0)
                     <span class="label label-success">{{ Helper::get_reservation()->where('seen', false)->count() }}</span>
                   @endif
                 </a>
-                @if(Helper::get_reservation()->where('seen', false)->count() > 0)
+                @if((Helper::get_reservation()->where('seen', false)->count() > 0) || (Helper::get_reservation()->where('seen', true)->count() > 0))
                   <ul class="dropdown-menu">
-                    <li class="header">You have {{ Helper::get_reservation()->where('seen', false)->count() }} new reservation(s)</li>
+                    @if(Helper::get_reservation()->where('seen', false)->count() > 0)
+                      <li class="header">You have {{ Helper::get_reservation()->where('seen', false)->count() }} new reservation(s)</li>
+                    @endif
                     <li>
                       <!-- inner menu: contains the actual data -->
                       <ul class="menu">
@@ -305,6 +309,22 @@
           },
           cache: false,
       });
+
+      $('.seen-notif').on('click', function(){
+        let element = $(this)
+        $.ajax({
+          url: '{{ route('seen_notif') }}',
+          data: {type: element.data('type')},
+          dataType: 'json',
+          type: 'post'
+        })
+        .done(function(){
+          element.children('span').remove()
+        })
+        .fail(function(){
+          toastr.error("Failed! Something went wrong")
+        })
+      })
     </script>
 
     @toastr_js
