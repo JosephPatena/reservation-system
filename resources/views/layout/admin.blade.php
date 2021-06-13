@@ -12,6 +12,14 @@
     
     @yield('stylesheets')
 
+    <style type="text/css">
+      body {
+          -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
+          zoom: 0.8; /* Other non-webkit browsers */
+          zoom: 80%; /* Webkit browsers */
+      }
+    </style>
+
     @toastr_css
   </head>
   <body class="hold-transition skin-blue sidebar-mini">
@@ -21,9 +29,9 @@
         <!-- Logo -->
         <a href="index2.html" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><b>R</b>S</span>
+          <span class="logo-mini">R<b>S</b></span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>Reservation</b>System</span>
+          <span class="logo-lg">Reservation <b>System</b></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
@@ -36,119 +44,112 @@
               <!-- Messages: style can be found in dropdown.less-->
               <li class="dropdown messages-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-envelope-o"></i>
-                  <span class="label label-success">4</span>
+                  <i class="fa fa-comment-o"></i>
+                  @if(Helper::get_inquiries()->where('seen', false)->count() > 0)
+                    <span class="label label-success">{{ Helper::get_inquiries()->where('seen', false)->count() }}</span>
+                  @endif
                 </a>
-                <ul class="dropdown-menu">
-                  <li class="header">You have 4 messages</li>
-                  <li>
-                    <!-- inner menu: contains the actual data -->
-                    <ul class="menu">
-                      <li><!-- start message -->
-                        <a href="#">
-                          <div class="pull-left">
-                            <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                          </div>
-                          <h4>
-                            Support Team
-                            <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                          </h4>
-                          <p>Why not buy a new awesome theme?</p>
-                        </a>
-                      </li><!-- end message -->
-                      <li>
-                        <a href="#">
-                          <div class="pull-left">
-                            <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                          </div>
-                          <h4>
-                            AdminLTE Design Team
-                            <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                          </h4>
-                          <p>Why not buy a new awesome theme?</p>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <div class="pull-left">
-                            <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                          </div>
-                          <h4>
-                            Developers
-                            <small><i class="fa fa-clock-o"></i> Today</small>
-                          </h4>
-                          <p>Why not buy a new awesome theme?</p>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <div class="pull-left">
-                            <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                          </div>
-                          <h4>
-                            Sales Department
-                            <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                          </h4>
-                          <p>Why not buy a new awesome theme?</p>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <div class="pull-left">
-                            <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                          </div>
-                          <h4>
-                            Reviewers
-                            <small><i class="fa fa-clock-o"></i> 2 days</small>
-                          </h4>
-                          <p>Why not buy a new awesome theme?</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="footer"><a href="#">See All Messages</a></li>
-                </ul>
+                @if(Helper::get_inquiries()->where('seen', false)->count() > 0)
+                  <ul class="dropdown-menu">
+                    <li class="header">You have {{ Helper::get_inquiries()->where('seen', false)->count() }} inquiries</li>
+                    <li>
+                      <!-- inner menu: contains the actual data -->
+                      <ul class="menu">
+                        @foreach(Helper::get_inquiries()->where('seen', false) as $inquiry)
+                          <li><!-- start message -->
+                            <a href="#">
+                              <div class="pull-left">
+                                <img src="{{ (!empty($inquiry->guest->image->hash_name) && $inquiry->same_as_profile) ? url('storage/image/'.$inquiry->guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" class="img-circle" alt="User Image">
+                              </div>
+                              <h4>
+                                {{ $inquiry->name }}
+                                <small><i class="fa fa-clock-o"></i> {{ \Carbon\Carbon::parse($inquiry->created_at)->diffForHumans() }}</small>
+                              </h4>
+                              <p>{{ $inquiry->message }}</p>
+                            </a>
+                          </li><!-- end message -->
+                        @endforeach
+
+                        @foreach(Helper::get_inquiries()->where('seen', true)->take(10) as $inquiry)
+                          <li><!-- start message -->
+                            <a href="#">
+                              <div class="pull-left">
+                                <img src="{{ (!empty($inquiry->guest->image->hash_name) && $inquiry->same_as_profile) ? url('storage/image/'.$inquiry->guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" class="img-circle" alt="User Image">
+                              </div>
+                              <h4>
+                                {{ $inquiry->name }}
+                                <small><i class="fa fa-clock-o"></i> {{ \Carbon\Carbon::parse($inquiry->created_at)->diffForHumans() }}</small>
+                              </h4>
+                              <p>{{ $inquiry->message }}</p>
+                            </a>
+                          </li><!-- end message -->
+                        @endforeach
+                      </ul>
+                    </li>
+                    <li class="footer"><a href="{{ route('inquiries.index') }}">See All Inquiries</a></li>
+                  </ul>
+                @endif
               </li>
               <!-- Notifications: style can be found in dropdown.less -->
               <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-bell-o"></i>
-                  <span class="label label-warning">10</span>
+                  <i class="fa fa-bookmark-o"></i>
+                  @if(Helper::get_reservation()->where('seen', false)->count() > 0)
+                    <span class="label label-success">{{ Helper::get_reservation()->where('seen', false)->count() }}</span>
+                  @endif
                 </a>
-                <ul class="dropdown-menu">
-                  <li class="header">You have 10 notifications</li>
-                  <li>
-                    <!-- inner menu: contains the actual data -->
-                    <ul class="menu">
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the page and may cause design problems
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-users text-red"></i> 5 new members joined
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-user text-red"></i> You changed your username
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="footer"><a href="#">View all</a></li>
-                </ul>
+                @if(Helper::get_reservation()->where('seen', false)->count() > 0)
+                  <ul class="dropdown-menu">
+                    <li class="header">You have {{ Helper::get_reservation()->where('seen', false)->count() }} new reservation(s)</li>
+                    <li>
+                      <!-- inner menu: contains the actual data -->
+                      <ul class="menu">
+                        @foreach(Helper::get_reservation()->where('seen', false) as $rsvtn)
+                          <li>
+                            <a href="{{ route('reports.show', $rsvtn->id) }}" class="text-green">
+                              <i class="fa fa-bookmark-o"></i>
+                              @if($rsvtn->status_id == 1)
+                                <span class="badge bg-aqua">{{ $rsvtn->status->name }}</span>
+                              @elseif($rsvtn->status_id == 2)
+                                <span class="badge bg-red">{{ $rsvtn->status->name }}</span>
+                              @elseif($rsvtn->status_id == 3)
+                                <span class="badge bg-green">{{ $rsvtn->status->name }}</span>
+                              @else
+                                <span class="badge bg-yellow">{{ $rsvtn->status->name }}</span>
+                              @endif
+                              &nbsp;
+                              {{ $rsvtn->room->accomodation->name }}
+                              &nbsp;
+                              Invoice #{{ $rsvtn->invoice_no }}
+                            </a>
+                          </li>
+                        @endforeach
+
+                        @foreach(Helper::get_reservation()->where('seen', true)->take(10) as $rsvtn)
+                          <li>
+                            <a href="{{ route('reports.show', $rsvtn->id) }}">
+                              <i class="fa fa-bookmark-o"></i>
+                              @if($rsvtn->status_id == 1)
+                                <span class="badge bg-aqua">{{ $rsvtn->status->name }}</span>
+                              @elseif($rsvtn->status_id == 2)
+                                <span class="badge bg-red">{{ $rsvtn->status->name }}</span>
+                              @elseif($rsvtn->status_id == 3)
+                                <span class="badge bg-green">{{ $rsvtn->status->name }}</span>
+                              @else
+                                <span class="badge bg-yellow">{{ $rsvtn->status->name }}</span>
+                              @endif
+                              &nbsp;
+                              {{ $rsvtn->room->accomodation->name }}
+                              &nbsp;
+                              Invoice #{{ $rsvtn->invoice_no }}
+                            </a>
+                          </li>
+                        @endforeach
+                      </ul>
+                    </li>
+                    <li class="footer"><a href="{{ route('manage_reservation') }}">View all</a></li>
+                  </ul>
+                @endif
               </li>
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
@@ -159,7 +160,7 @@
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="{{ !empty(Helper::get_user()->image) ? url('storage/image/'.Helper::get_user()->image) : asset('admin/dist/img/default-user.png') }}" class="img-circle" alt="User Image">
+                    <img src="{{ !empty(Helper::get_user()->image->hash_name) ? url('storage/image/'.Helper::get_user()->image->hash_name) : asset('admin/dist/img/default-user.png') }}" class="img-circle" alt="User Image">
                     <p>
                       Reservation System
                       <small>Administrator</small>
@@ -168,7 +169,7 @@
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">Profile</a>
+                      <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Profile</a>
                     </div>
                     <div class="pull-right">
                       <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Sign out</a>
@@ -191,71 +192,65 @@
           <!-- Sidebar user panel -->
           <div class="user-panel">
             <div class="pull-left image">
-              <img src="{{ !empty(Helper::get_user()->image) ? url('storage/image/'.Helper::get_user()->image) : asset('admin/dist/img/default-user.png') }}" class="img-circle" alt="User Image">
+              <img src="{{ !empty(Helper::get_user()->image->hash_name) ? url('storage/image/'.Helper::get_user()->image->hash_name) : asset('admin/dist/img/default-user.png') }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
               <p>{{ Auth::user()->name }}</p>
               <a class="indicator"><i class="fa fa-circle" style="color:lime"></i>&nbsp;&nbsp;&nbsp;Online</a>
             </div>
           </div>
-          <!-- search form -->
-          <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-              <input type="text" name="q" class="form-control" placeholder="Search...">
-              <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-          </form>
-          <!-- /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
-            <li>
+            <li class="{{ Request::is('admin/homepage') ? "active" : "" }}">
               <a href="/">
-                <i class="fa fa-dashboard"></i> <span>Overview</span>
+                <i class="fa fa-home"></i> <span>Overview</span>
               </a>
             </li>
-            <li>
+            <li class="{{ Request::is('calendar') ? "active" : "" }}">
               <a href="{{ route('calendar.index') }}">
                 <i class="fa fa-calendar"></i> <span>Calendar</span>
               </a>
             </li>
-            <li>
+            <li class="{{ Request::is('rooms') ? "active" : "" }}">
               <a href="{{ route('rooms.index') }}">
-                <i class="fa fa-book"></i> <span>Rooms</span>
+                <i class="fa fa-star"></i> <span>Rooms</span>
               </a>
             </li>
-            <li>
+            <li class="{{ Request::is('accomodation') ? "active" : "" }}">
               <a href="{{ route('accomodation.index') }}">
-                <i class="fa fa-star"></i> <span>Accomodation</span>
+                <i class="fa fa-book"></i> <span>Accomodation</span>
               </a>
             </li>
-            <li>
-              <a href="{{ route('reservation.index') }}">
-                <i class="fa fa-bookmark-o"></i> <span>Reservation</span>
-                <small class="label pull-right bg-green">12 New</small>
+            <li class="{{ Request::is('manage/reservation') ? "active" : "" }}">
+              <a href="{{ route('manage_reservation') }}">
+                <i class="fa fa-bookmark"></i> <span>Reservation</span>
+                @if(Helper::get_reservation()->where('seen', false)->count() > 0)
+                  <small class="label pull-right bg-green">{{ Helper::get_reservation()->where('seen', false)->count() }} New</small>
+                @endif
               </a>
             </li>
-            <li>
+            <li class="{{ Request::is('reports') ? "active" : "" }}">
               <a href="{{ route('reports.index') }}">
                 <i class="fa fa-newspaper-o"></i> <span>Reports</span>
               </a>
             </li>
-            <li>
+            <li class="{{ Request::is('guests') ? "active" : "" }}">
               <a href="{{ route('guests') }}">
-                <i class="fa fa-briefcase"></i> <span>Guest</span>
+                <i class="fa fa-users"></i> <span>Guest</span>
               </a>
             </li>
-            <li>
+            <li class="{{ Request::is('billing') ? "active" : "" }}">
               <a href="{{ route('billing.index') }}">
                 <i class="fa fa-credit-card"></i> <span>Billing</span>
               </a>
             </li>
-            <li>
+            <li class="{{ Request::is('inquiries') ? "active" : "" }}">
               <a href="{{ route('inquiries.index') }}">
                 <i class="fa fa-comment-o"></i> <span>inquiries</span>
-                <small class="label pull-right bg-green">12 New</small>
+                @if(Helper::get_inquiries()->where('seen', false)->count() > 0)
+                  <small class="label pull-right bg-green">{{ Helper::get_inquiries()->where('seen', false)->count() }} New</small>
+                @endif
               </a>
             </li>
           </ul>

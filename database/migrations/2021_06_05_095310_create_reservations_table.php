@@ -24,6 +24,7 @@ class CreateReservationsTable extends Migration
             $table->dateTime('departure_date');
             $table->integer('length_of_stay');
             $table->foreignId('status_id')->constrained()->onDelete('cascade');
+            $table->boolean('seen')->default(false);
             $table->timestamps();
         });
     }

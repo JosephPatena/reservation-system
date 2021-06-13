@@ -11,6 +11,7 @@ use App\Http\Controllers\PayMayaController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ReservationController;
@@ -60,6 +61,7 @@ Route::group(['middleware' => 'guest'], function(){
 */
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+	Route::post('check-password', [AuthController::class, 'check_password'])->name('check_password');
 });
 
 /*
@@ -68,6 +70,11 @@ Route::group(['middleware' => 'auth'], function(){
 |--------------------------------------------------------------------------
 */
 Route::group(['middleware' => ['admin', 'auth']], function(){
+	# Profile
+	Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
+	Route::post('update_profile', [ProfileController::class, 'update_profile'])->name('update_profile');
+	
+
 	# Homepage
 	Route::get('admin/homepage', [HomepageController::class, 'admin_homepage'])->name('admin_homepage');
 
@@ -95,9 +102,16 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	Route::resource('reports', ReportsController::class);
 	Route::get('reports/guest/{id}', [ReportsController::class, 'guest'])->name('guest');
 	Route::get('reports/room/{id}', [ReportsController::class, 'room'])->name('room_reports');
+	Route::get('reports-pdf', [ReportsController::class, 'pdf'])->name('reports_to_pdf');
+	Route::get('reports-export', [ReportsController::class, 'export'])->name('reports_to_export');
+	Route::post('reports/set-date-range', [ReportsController::class, 'set_date_range'])->name('set_date_range');
 
 	# Calendar
 	Route::resource('calendar', CalendarController::class);
+
+	# Reservation
+	Route::get('manage/reservation', [ReservationController::class, 'manage_reservation'])->name('manage_reservation');
+	Route::post('set-status', [ReservationController::class, 'set_status'])->name('set_status');
 
 });
 
@@ -143,6 +157,10 @@ Route::group(['middleware' => ['visitor', 'auth', 'restriction']], function(){
 	Route::post('complete-transaction', [ReservationController::class, 'complete_transaction'])->name('complete_transaction');
 	Route::get('transaction-invoice/{id}', [ReservationController::class, 'transaction_invoice'])->name('transaction_invoice');
 	Route::get('print-invoice/{id}', [ReservationController::class, 'print_invoice'])->name('print_invoice');
+
+	# Inquiries
+	Route::get('my-inquiries', [InquiryController::class, 'my_inquiries'])->name('my_inquiries');
+	Route::post('store-inquiry', [InquiryController::class, 'store_inquiry'])->name('store_inquiry');
 });
 
 /*

@@ -17,73 +17,26 @@
 @endsection
 
 @section('content')
-<!-- Content Header (Page header) -->
+  <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Guest Reservation
-      <small>Reports</small>
+      Reservation
+      <small>Dashboard</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-newspaper-o"></i> Guest Reservation</a></li>
-      <li class="active">Reports</li>
+      <li><a href="#"><i class="fa fa-newspaper-o"></i>Reservation</a></li>
+      <li class="active">Dashboard</li>
     </ol>
   </section>
 
   <!-- Main content -->
   <section class="content">
     <div class="row">
-      <div class="col-lg-3 col-md-4">
-        <!-- Widget: user widget style 1 -->
-        <div class="box box-widget widget-user">
-          <!-- Add the bg color to the header using any of the bg-* classes -->
-          <div class="widget-user-header bg-black" style="background: url('{{ asset('admin/dist/img/photo1.png') }}') center center;">
-            <h3 class="widget-user-username">{{ $guest->name }}</h3>
-            <h5 class="widget-user-desc">
-              @if($guest->restricted)
-                <span class="badge bg-red">Restricted</span>
-              @else
-                <span class="badge bg-green">Unrestricted</span>
-              @endif
-            </h5>
-          </div>
-          <div class="widget-user-image">
-            <img class="img-circle" src="{{ !empty($guest->image->hash_name) ? url('storage/image/'.$guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="User Avatar">
-          </div>
-          <div class="box-footer">
-            <div class="row">
-              <div class="col-sm-3 border-right">
-                <div class="description-block">
-                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 1)->count() }}</h5>
-                  <span class="description-text" style="font-size: 11px;">Reserved</span>
-                </div><!-- /.description-block -->
-              </div><!-- /.col -->
-              <div class="col-sm-3 border-right">
-                <div class="description-block">
-                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 2)->count() }}</h5>
-                  <span class="description-text" style="font-size: 11px;">Check In</span>
-                </div><!-- /.description-block -->
-              </div><!-- /.col -->
-              <div class="col-sm-3 border-right">
-                <div class="description-block">
-                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 3)->count() }}</h5>
-                  <span class="description-text" style="font-size: 11px;">Check Out</span>
-                </div><!-- /.description-block -->
-              </div><!-- /.col -->
-              <div class="col-sm-3">
-                <div class="description-block">
-                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 4)->count() }}</h5>
-                  <span class="description-text" style="font-size: 11px;">Cancelled</span>
-                </div><!-- /.description-block -->
-              </div><!-- /.col -->
-            </div><!-- /.row -->
-          </div>
-        </div><!-- /.widget-user -->
-      </div>
-      <div class="col-lg-9 col-md-8">
+      <div class="col-xs-12">
 
           <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Booking History</h3>
+              <h3 class="box-title">List</h3>
             </div><!-- /.box-header -->
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
@@ -97,13 +50,14 @@
                     <th>Arrival Date</th>
                     <th>Departure Date</th>
                     <th>Length of Stay (day)</th>
-                    <th>Total</th>
+                    <th>Guest</th>
                     <th>Status</th>
+                    <th>Total</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($reservations as $key => $reservation)
+                  @foreach($reservations as $key => $reservation)
                     <tr>
                       <td>{{ $key+1 }}.</td>
                       <td>{{ $reservation->invoice_no }}</td>
@@ -115,6 +69,9 @@
                       <td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>
                       <td>{{ \Carbon\Carbon::parse($reservation->departure_date)->format("F d, Y h:i A") }}</td>
                       <td>{{ $reservation->length_of_stay }}</td>
+                      <td>
+                        <img class="open-url" data-url="{{ route('guest', $reservation->guest->id) }}" data-toggle="tooltip" title="View Reports" style="width: 25px; height: 25px; cursor: pointer;" src="{{ !empty($reservation->guest->image->hash_name) ? url('storage/image/'.$reservation->guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="Guest Image">&nbsp;&nbsp;<a href="{{ route('guest', $reservation->guest->id) }}"  data-toggle="tooltip" title="View Reports">{{ $reservation->guest->name }}</a>
+                      </td>
                       <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
                       <td>
                         @if($reservation->status_id == 1)
@@ -127,9 +84,23 @@
                           <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
                         @endif
                       </td>
-                      <td><button class="btn btn-primary btn-sm open-url" data-url="{{ route('reports.show', $reservation->id) }}" data-toggle="tooltip" title="Show Details"><i class="fa fa-folder-open-o"></i></button></td>
+                      <td>
+                        <div class="btn-group">
+                          <button class="btn btn-primary btn-sm open-url" data-url="{{ route('reports.show', $reservation->id) }}" data-toggle="tooltip" title="Show Details"><i class="fa fa-folder-open-o"></i></button>
+                          <button type="button" class="btn btn-sm btn-success" style="pointer-events: none;">Set as</button>
+                          <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(3) }}" data-toggle="modal" data-target="#confirm">Check In</a></li>
+                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(4) }}" data-toggle="modal" data-target="#confirm">Check Out</a></li>
+                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(2) }}" data-toggle="modal" data-target="#confirm">Cancel</a></li>
+                          </ul>
+                        </div>
+                      </td>
                     </tr>
-                    @endforeach
+                  @endforeach
                 </tbody>
               </table>
             </div><!-- /.box-body -->
@@ -137,7 +108,37 @@
       </div><!-- /.col -->
     </div><!-- /.row -->
   </section>
+  <div class="modal fade" id="confirm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <form class="check-pass">
 
+          <div class="modal-body">
+            <div class="form-horizontal">
+              <input type="hidden" class="id">
+              <input type="hidden" class="status_id">
+
+              <div class="form-group">
+                <label for="inputPass" class="col-sm-2 control-label">Password <span style="color: red;">*</span></label>
+                <div class="col-sm-10">
+                  <input name="password" type="password" class="form-control" id="inputPass" placeholder="Please enter your Password" required="" value="{{ old('password') }}">
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary btn-sm">Proceed</button>
+          </div>
+        </form>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 @endsection
 
 @section('scripts')
@@ -169,5 +170,47 @@
         "autoWidth": false
       });
     });
+
+    $(document).on('click', '.set-status', function(){
+      $('input.id').val($(this).data('id'))
+      $('input.status_id').val($(this).data('status_id'))
+    })
+
+    $(document).on('submit', 'form.check-pass', function(evt){
+      evt.preventDefault()
+
+      $.ajax({
+        url: "{{ route('check_password') }}",
+        data: $(this).serialize(),
+        dataType: "json",
+        type: "post"
+      })
+      .done(function(correct){
+        if (correct) {
+          set_status()
+        }else{
+          toastr.error("Password is incorrect")
+        }
+      })
+      .fail(function(){
+        toastr.error("Failed! Something went wrong")
+      })
+    })
+
+    function set_status(){
+      $.ajax({
+        url: "{{ route('set_status') }}",
+        data: {id:$('input.id').val(), status_id:$('input.status_id').val()},
+        dataType: "json",
+        type: "post"
+      })
+      .done(function(){
+        toastr.success("Status updated successfully.")
+        window.location.reload(true)
+      })
+      .fail(function(){
+        toastr.error("Failed! Something went wrong")
+      })
+    }
   </script>
 @endsection

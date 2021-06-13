@@ -152,4 +152,14 @@ class ReservationController extends Controller
         $pdf = PDF::loadView('guest.checkout.pdf', compact('reservation'));
         return $pdf->stream();
     }
+
+    public function manage_reservation(){
+        $reservations = Reservation::latest()->get();
+        return view('admin.reservation.index', compact('reservations'));
+    }
+
+    public function set_status(Request $request){
+        Reservation::findOrFail(decrypt($request->id))->update(['status_id' => decrypt($request->status_id)]);
+        return response()->json(true);
+    }
 }

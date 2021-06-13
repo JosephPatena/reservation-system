@@ -82,7 +82,7 @@
                 <img src="{{ asset('admin/dist/img/pud.png') }}" alt="Icon">
               </div><!-- /.widget-user-image -->
               <h3 class="widget-user-username">Pay Upon Arrival</h3>
-              <h5 class="widget-user-desc">Pay when you arriva at Resort. Let your guest pay at Resort's checkout.</h5>
+              <h5 class="widget-user-desc">Pay only when you arrive on Site.</h5>
             </div>
             <div class="box-footer">
               <div class="form-horizontal">
@@ -234,14 +234,14 @@
                   <div class="form-group">
                     <label for="inputPublicKey" class="col-sm-2 control-label">Public-facing API Key <span style="color: red;">*</span></label>
                     <div class="col-sm-6">
-                      <input name="public_key" type="text" class="form-control" id="inputPublicKey" placeholder="Public Key" required="" value="{{ $payment_method[3]->public_key }}">
+                      <input name="public_key" type="text" class="form-control" id="inputPublicKey" placeholder="Public-facing API Key" required="" value="{{ $payment_method[3]->public_key }}">
                     </div>
                   </div> 
 
                   <div class="form-group">
                     <label for="inputDesc" class="col-sm-2 control-label">Secret API Key <span style="color: red;">*</span></label>
                     <div class="col-sm-6">
-                      <input name="secret_key" type="text" class="form-control" id="inputDesc" placeholder="Secret Key" required="" value="{{ $payment_method[3]->secret_key }}">
+                      <input name="secret_key" type="text" class="form-control" id="inputDesc" placeholder="Secret API Key" required="" value="{{ $payment_method[3]->secret_key }}">
                     </div>
                   </div>
 
@@ -296,7 +296,7 @@
           1. <a href="https://manager.paymaya.com/" target="__blank">Log in to your PayMaya Business Merchant Manager&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>&nbsp;&nbsp;with your PayMaya account. <br>
           2.Select <b>API keys</b> tab you find in the left panel of your PayMaya Business Merchant Manager Dashboard<br>
           3. Make sure you toggled the radio button to get the live credentials you'll use to receive payment from your customers. Note that you can switch to test data for testing purpose only.<br>
-          4. Copy your <b>Public</b> and <b>Secret Key</b> and paste it to the form.
+          4. Copy your <b>Public-facing API key</b> and <b>Secret API key</b> and paste it to the form.
         </p>
       </div>
     </div>

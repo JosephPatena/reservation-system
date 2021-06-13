@@ -67,7 +67,7 @@
       <small>Dashboard</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-book"></i> Room</a></li>
+      <li><a href="#"><i class="fa fa-star"></i> Room</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>

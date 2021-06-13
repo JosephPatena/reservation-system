@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Inquiry;
+use Auth;
 
 class InquiryController extends Controller
 {
@@ -13,50 +15,8 @@ class InquiryController extends Controller
      */
     public function index()
     {
-        return view('admin.inquiries.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $inquiries = Inquiry::all();
+        return view('admin.inquiries.index', compact('inquiries'));
     }
 
     /**
@@ -66,19 +26,28 @@ class InquiryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Inquiry $inquiry)
     {
-        //
+        $inquiry->update(['response' => $request->response]);
+        toastr()->success("Your response sent successfully.");
+        return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function my_inquiries(){
+
+    }
+
+    public function store_inquiry(Request $request){
+        $request->request->add(['user_id' => Auth::id()]);
+        if ($request->same_as_profile=="on") {
+            $request->merge(['same_as_profile' => true]);
+        }else{
+            $request->merge(['same_as_profile' => false]);
+        }
+
+        Inquiry::create($request->all());
+
+        toastr()->success("Your inquiry sent successfully.");
+        return redirect()->back();
     }
 }

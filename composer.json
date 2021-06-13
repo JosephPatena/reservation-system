@@ -13,6 +13,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
+        "maatwebsite/excel": "^3.1",
         "paypal/paypal-checkout-sdk": "1.0.1",
         "stripe/stripe-php": "^7.83",
         "yoeunes/toastr": "^1.2"

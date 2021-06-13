@@ -2,13 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ReportsExport;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Models\User;
+use Carbon\Carbon;
+use Session;
+use PDF;
 
 class ReportsController extends Controller
 {
+
+    public function set_date_range(Request $request){
+        Session::put('date_range', $request->date_range);
+        return response()->json(true);
+    }
+
+    private function reservations(){
+        if (Session::has('date_range')) {
+            $range = explode("-", Session::get('date_range'));
+            $from = Carbon::parse($range[0])->format('Y-m-d H:i:s');
+            $to = Carbon::parse($range[1])->format('Y-m-d H:i:s');
+            $reservations = Reservation::whereBetween('created_at', [$from, $to])->latest()->get();
+        }
+        else{
+            $reservations = Reservation::latest()->get();
+        }
+        return $reservations;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,29 +39,8 @@ class ReportsController extends Controller
      */
     public function index()
     {
-        $reservations = Reservation::latest()->get();
+        $reservations = $this->reservations();
         return view('admin.reports.index', compact('reservations'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -53,40 +55,6 @@ class ReportsController extends Controller
         return view('admin.reports.manage', compact('reservation'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     public function guest($id){
         $guest = User::findOrFail($id);
         $reservations = Reservation::where('user_id', $id)->latest()->get();
@@ -97,5 +65,15 @@ class ReportsController extends Controller
         $room = Room::findOrFail($id);
         $reservations = Reservation::where('room_id', $id)->latest()->get();
         return view('admin.reports.room', compact('room', 'reservations'));
+    }
+
+    public function pdf(){
+        $reservations = $this->reservations();
+        $pdf = PDF::loadView('admin.reports.pdf', compact('reservations'));
+        return $pdf->stream();
+    }
+
+    public function export(){
+        return Excel::download(new ReportsExport, 'reservations.xlsx');
     }
 }

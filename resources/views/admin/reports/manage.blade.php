@@ -32,23 +32,100 @@
   <!-- Main content -->
   <section class="content">
 		<div class="row">
-			<div class="col-lg-3 col-md-4">
-				<!-- Widget: user widget style 1 -->
+			
+		  <div class="col-lg-9 col-md-8">
+
+		      <div class="box">
+		        <div class="box-header">
+		          <h3 class="box-title">Reservation Details</h3>
+		        </div><!-- /.box-header -->
+		        <div class="box-body">
+		          <table class="table table-bordered table-striped">
+		            <thead>
+		              <tr>
+                    <th>Invoice</th>
+		                <th>Room Type</th>
+		                <th>Price</th>
+		                <th>Arrival Date</th>
+		                <th>Departure Date</th>
+		                <th>Length of Stay (day)</th>
+		                <th>Total</th>
+                    <th>Status</th>
+		              </tr>
+		            </thead>
+		            <tbody>
+		            		<tr>
+                      <td>{{ $reservation->invoice_no }}</td>
+		            			<td>{{ $reservation->room->accomodation->name }}</td>
+		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->room->price, 2) }}</td>
+		            			<td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>
+		            			<td>{{ \Carbon\Carbon::parse($reservation->departure_date)->format("F d, Y h:i A") }}</td>
+		            			<td>{{ $reservation->length_of_stay }}</td>
+		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
+                      <td>
+                        @if($reservation->status_id == 1)
+                          <span class="badge bg-aqua">{{ $reservation->status->name }}</span>
+                        @elseif($reservation->status_id == 2)
+                          <span class="badge bg-red">{{ $reservation->status->name }}</span>
+                        @elseif($reservation->status_id == 3)
+                          <span class="badge bg-green">{{ $reservation->status->name }}</span>
+                        @else
+                          <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
+                        @endif
+                      </td>
+		            		</tr>
+		            </tbody>
+		          </table>
+		        </div><!-- /.box-body -->
+		      </div><!-- /.box -->
+		  </div><!-- /.col -->
+      <div class="col-lg-3 col-md-4">
+        <!-- Widget: user widget style 1 -->
         <div class="box box-widget widget-user">
           <!-- Add the bg color to the header using any of the bg-* classes -->
           <div class="widget-user-header bg-black" style="background: url('{{ asset('admin/dist/img/photo1.png') }}') center center;">
             <h3 class="widget-user-username">{{ $reservation->guest->name }}</h3>
-            <h5 class="widget-user-desc">Guest</h5>
+            <h5 class="widget-user-desc">
+              @if($reservation->guest->restricted)
+                <span class="badge bg-red">Restricted</span>
+              @else
+                <span class="badge bg-green">Unrestricted</span>
+              @endif
+            </h5>
           </div>
           <div class="widget-user-image">
             <img class="img-circle" src="{{ !empty($reservation->guest->image->hash_name) ? url('storage/image/'.$reservation->guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="User Avatar">
           </div>
+          <div class="box-footer">
+            <div class="row">
+              <div class="col-sm-3 border-right">
+                <div class="description-block">
+                  <h5 class="description-header">{{ $reservation->guest->reservation->where('status_id', 1)->count() }}</h5>
+                  <span class="description-text" style="font-size: 11px;">Reserved</span>
+                </div><!-- /.description-block -->
+              </div><!-- /.col -->
+              <div class="col-sm-3 border-right">
+                <div class="description-block">
+                  <h5 class="description-header">{{ $reservation->guest->reservation->where('status_id', 2)->count() }}</h5>
+                  <span class="description-text" style="font-size: 11px;">Check In</span>
+                </div><!-- /.description-block -->
+              </div><!-- /.col -->
+              <div class="col-sm-3 border-right">
+                <div class="description-block">
+                  <h5 class="description-header">{{ $reservation->guest->reservation->where('status_id', 3)->count() }}</h5>
+                  <span class="description-text" style="font-size: 11px;">Check Out</span>
+                </div><!-- /.description-block -->
+              </div><!-- /.col -->
+              <div class="col-sm-3">
+                <div class="description-block">
+                  <h5 class="description-header">{{ $reservation->guest->reservation->where('status_id', 4)->count() }}</h5>
+                  <span class="description-text" style="font-size: 11px;">Cancelled</span>
+                </div><!-- /.description-block -->
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+          </div>
           <div class="box-footer no-padding">
             <ul class="nav nav-stacked">
-              <li><a>Reserved <span class="pull-right badge bg-aqua">{{ $reservation->guest->reservation->where('status_id', 1)->count() }}</span></a></li>
-              <li><a>Check In <span class="pull-right badge bg-green">{{ $reservation->guest->reservation->where('status_id', 2)->count() }}</span></a></li>
-              <li><a>Check Out <span class="pull-right badge bg-yellow">{{ $reservation->guest->reservation->where('status_id', 3)->count() }}</span></a></li>
-              <li><a>Cancelled <span class="pull-right badge bg-red">{{ $reservation->guest->reservation->where('status_id', 4)->count() }}</span></a></li>
               <li><a href="{{ route('guest', $reservation->guest->id) }}"><center>View Reports</center></a></li>
             </ul>
           </div>
@@ -60,7 +137,7 @@
           <div class="widget-user-header bg-default">
           
             <h3><small>Room <br> No.</small> <b>{{ $reservation->room->no }}</b></h3>
-            <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $reservation->room->id) }}" style="float: right; cursor: pointer;" title="View / Edit details"></i>
+            <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $reservation->room->id) }}" style="float: right; cursor: pointer;" data-toggle="tooltip" title="View / Edit details"></i>
             <h5>{{ $reservation->room->name }}</h5>
           </div>
           <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -88,59 +165,11 @@
           </div>
           <div class="box-footer no-padding">
             <ul class="nav nav-stacked">
-              <li><a>Reserved <span class="pull-right badge bg-aqua">{{ $reservation->room->reservation->where('status_id', 1)->count() }}</span></a></li>
-              <li><a>Check In <span class="pull-right badge bg-green">{{ $reservation->room->reservation->where('status_id', 2)->count() }}</span></a></li>
-              <li><a>Check Out <span class="pull-right badge bg-yellow">{{ $reservation->room->reservation->where('status_id', 3)->count() }}</span></a></li>
-              <li><a>Cancelled <span class="pull-right badge bg-red">{{ $reservation->room->reservation->where('status_id', 4)->count() }}</span></a></li>
               <li><a href="{{ route('room_reports', $reservation->room->id) }}"><center>View Reports</center></a></li>
             </ul>
           </div>
         </div><!-- /.widget-user -->
-			</div>
-		  <div class="col-lg-9 col-md-8">
-
-		      <div class="box">
-		        <div class="box-header">
-		          <h3 class="box-title">Reservation Details</h3>
-		        </div><!-- /.box-header -->
-		        <div class="box-body">
-		          <table id="example1" class="table table-bordered table-striped">
-		            <thead>
-		              <tr>
-		                <th>Room Type</th>
-		                <th>Price</th>
-		                <th>Arrival Date</th>
-		                <th>Departure Date</th>
-		                <th>Length of Stay (day)</th>
-		                <th>Total</th>
-                    <th>Status</th>
-		              </tr>
-		            </thead>
-		            <tbody>
-		            		<tr>
-		            			<td>{{ $reservation->room->accomodation->name }}</td>
-		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->room->price, 2) }}</td>
-		            			<td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>
-		            			<td>{{ \Carbon\Carbon::parse($reservation->departure_date)->format("F d, Y h:i A") }}</td>
-		            			<td>{{ $reservation->length_of_stay }}</td>
-		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
-                      <td>
-                        @if($reservation->status_id == 1)
-                          <span class="badge bg-aqua">{{ $reservation->status->name }}</span>
-                        @elseif($reservation->status_id == 2)
-                          <span class="badge bg-red">{{ $reservation->status->name }}</span>
-                        @elseif($reservation->status_id == 3)
-                          <span class="badge bg-green">{{ $reservation->status->name }}</span>
-                        @else
-                          <span class="badge bg-yellow">{{ $reservation->status->name }}</span>
-                        @endif
-                      </td>
-		            		</tr>
-		            </tbody>
-		          </table>
-		        </div><!-- /.box-body -->
-		      </div><!-- /.box -->
-		  </div><!-- /.col -->
+      </div>
 		</div><!-- /.row -->
   </section>
 

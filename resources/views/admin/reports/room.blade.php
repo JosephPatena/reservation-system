@@ -86,6 +86,7 @@
 		            <thead>
 		              <tr>
                     <th>#</th>
+                    <th>Invoice</th>
 		                <th>Room Type</th>
 		                <th>Price</th>
 		                <th>Arrival Date</th>
@@ -101,6 +102,7 @@
 		            		@foreach($reservations as $key => $reservation)
                     <tr>
                       <td>{{ $key+1 }}.</td>
+                      <td>{{ $reservation->invoice_no }}</td>
 		            			<td>{{ $reservation->room->accomodation->name }}</td>
 		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->room->price, 2) }}</td>
 		            			<td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>

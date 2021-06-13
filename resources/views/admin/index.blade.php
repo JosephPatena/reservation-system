@@ -34,15 +34,18 @@
   <section class="content">
     <div class="row">
       <div class="col-md-10">
+          
         @foreach($rooms as $room)
-          <div class="small-box bg-aqua col-md-2">
+        <div class="col-md-2">
+          <div class="small-box bg-aqua">
             <div class="inner">
-              No<h3>{{ $room->no }}</h3>
+              Room No.<h3>{{ $room->no }}</h3>
             <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $room->id) }}" style="float: right; cursor: pointer;" data-toggle="tooltip" title="View / Edit details"></i>
               <p>{{ $room->accomodation->name }}</p>
             </div>
             <a href="{{ route('room_reports', $room->id) }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
           </div>
+        </div>
         @endforeach
       </div>
       <div class="col-md-2">
@@ -51,25 +54,12 @@
           <div class="box-header with-border">
             <h3 class="box-title">Legend</h3>
           </div><!-- /.box-header -->
-          <div class="box-body">
-              <table class="table no-margin">
-                <tbody>
-                  <tr>
-                    <td><span class="label bg-aqua">Reserved</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="label bg-green">Check In</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="label bg-yellow">Check Out</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="label bg-red">Cancelled</span></td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="box-body row" style="text-align: center;">
+              <span class="label bg-aqua">Reserved</span>
+              <span class="label bg-green">Check In</span>
+              <span class="label bg-yellow">Check Out</span>
+              <span class="label bg-red">Cancelled</span>
           </div><!-- /.box-body -->
-        
         </div><!-- /.box -->
         
       </div>

@@ -78,4 +78,8 @@ class AuthController extends Controller
     public function admin_login(){
         return view('auth.admin_login');
     }
+
+    public function check_password(Request $request){
+        return response()->json(Hash::check($request->password, Auth::user()->password));
+    }
 }

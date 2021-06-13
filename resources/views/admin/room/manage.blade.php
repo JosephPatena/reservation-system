@@ -67,7 +67,7 @@
       <small>Dashboard</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-book"></i> Room Details</a></li>
+      <li><a href="#"><i class="fa fa-star"></i> Room Details</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>
@@ -87,7 +87,7 @@
                 <div class="form-horizontal">
 
                   <label for="inputRoomNo" class="control-label">Room No <span style="color: red;">*</span></label>
-                  <input name="room_no" type="text" class="form-control" id="inputRoomNo" placeholder="Room No" required="" value="{{ $room->no }}">
+                  <input name="no" type="text" class="form-control" id="inputRoomNo" placeholder="Room No" required="" value="{{ $room->no }}">
                   
                   <label for="inputRoom" class="control-label">Room Name <span style="color: red;">*</span></label>
                   <input name="name" type="text" class="form-control" id="inputRoom" placeholder="Room Name" required="" value="{{ $room->name }}">
@@ -117,7 +117,7 @@
 
                   <label class="toggle" style="padding-top: 10px">
                       <span for="toggle" class="control-label" style="cursor: pointer;">Available</span>
-                      <input class="toggle__input" name="is_available" type="checkbox" id="toggle">
+                      <input class="toggle__input" name="is_available" type="checkbox" id="toggle" {{ $room->is_available ? "checked" : "" }}>
                       <div class="toggle__fill"></div>
                   </label>
 
@@ -128,10 +128,6 @@
 
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a>Reserved <span class="pull-right badge bg-aqua">{{ $room->reservation->where('status_id', 1)->count() }}</span></a></li>
-                <li><a>Check In <span class="pull-right badge bg-green">{{ $room->reservation->where('status_id', 2)->count() }}</span></a></li>
-                <li><a>Check Out <span class="pull-right badge bg-yellow">{{ $room->reservation->where('status_id', 3)->count() }}</span></a></li>
-                <li><a>Cancelled <span class="pull-right badge bg-red">{{ $room->reservation->where('status_id', 4)->count() }}</span></a></li>
                 <li><a href="{{ route('room_reports', $room->id) }}"><center>View Reports</center></a></li>
               </ul>
             </div>

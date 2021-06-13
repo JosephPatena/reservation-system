@@ -32,17 +32,130 @@
   <!-- Main content -->
   <section class="content">
 		<div class="row">
-		  <div class="col-xs-12">
+
+      <div class="col-md-2 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-blue">
+          <div class="inner">
+            <h3>{{ Helper::get_room()->count() }}</h3>
+            <p>Total Room</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-star"></i>
+          </div>
+          <a href="{{ route('rooms.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-aqua">
+          <div class="inner">
+            <h3>{{ Helper::get_reservation()->where('status_id', 1)->count() }}</h3>
+            <p>Total Reserved</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-calendar-plus-o"></i>
+          </div>
+          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-xs-6">  
+        <!-- small box -->
+        <div class="small-box bg-green">
+          <div class="inner">
+            <h3>{{ Helper::get_reservation()->where('status_id', 3)->count() }}<sup style="font-size: 20px"></sup></h3>
+            <p>Total Check In</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-calendar-check-o"></i>
+          </div>
+          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-xs-6">  
+        <!-- small box -->
+        <div class="small-box bg-yellow">
+          <div class="inner">
+            <h3>{{ Helper::get_reservation()->where('status_id', 4)->count() }}</h3>
+            <p>Total Check Out</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-calendar-times-o"></i>
+          </div>
+          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-xs-6">  
+        <!-- small box -->
+        <div class="small-box bg-red">
+          <div class="inner">
+            <h3>{{ Helper::get_reservation()->where('status_id', 2)->count() }}</h3>
+            <p>Total Cancelled</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-calendar-minus-o"></i>
+          </div>
+          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-xs-6">  
+        <!-- small box -->
+        <div class="small-box bg-maroon">
+          <div class="inner">
+            <h3>{{ Helper::get_guest()->count() }}</h3>
+            <p>Total Guest</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-users"></i>
+          </div>
+          <a href="{{ route('guests') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div class="col-md-4">
+          <!-- Date range -->
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">
+                Filter Date:
+              </div>
+              <input type="text" class="form-control pull-right" id="date_range">
+            </div><!-- /.input group -->
+          </div><!-- /.form group -->
+        </div>
+        <div class="col-md-8">
+          <div class="btn-group pull-right">
+            <button type="button" class="btn btn-sm btn-success" style="pointer-events: none;">Export as</button>
+            <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="{{ route('reports_to_pdf') }}">PDF</a></li>
+              <li><a href="{{ route('reports_to_export') }}">Excel</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+		  <div class="col-md-12">
 
 		      <div class="box">
 		        <div class="box-header">
 		          <h3 class="box-title">Booking History</h3>
 		        </div><!-- /.box-header -->
-		        <div class="box-body">
+		        <div class="box-body table-responsive">
 		          <table id="example1" class="table table-bordered table-striped">
 		            <thead>
 		              <tr>
 		              	<th>#</th>
+		              	<th>Invoice</th>
 		              	<th>Room</th>
 		                <th>Room Type</th>
 		                <th>Price</th>
@@ -50,8 +163,8 @@
 		                <th>Departure Date</th>
 		                <th>Length of Stay (day)</th>
 		                <th>Guest</th>
-		                <th>Status</th>
 		                <th>Total</th>
+		                <th>Status</th>
 		                <th style="width: 10px !important">Action</th>
 		              </tr>
 		            </thead>
@@ -59,6 +172,7 @@
 		            	@foreach($reservations as $key => $reservation)
 		            		<tr>
 		            			<td>{{ $key+1 }}.</td>
+		            			<td>{{ $reservation->invoice_no }}</td>
 		            			<td>
 	                      <img class="open-url" data-url="{{ route('room_reports', $reservation->room->id) }}" data-toggle="tooltip" title="View Reports" style="width: 25px; height: 25px; cursor: pointer;" src="{{ url('storage/image/' . $reservation->room->images->first()->hash_name) }}" alt="Room Image">&nbsp;&nbsp;<a href="{{ route('room_reports', $reservation->room->id) }}"  data-toggle="tooltip" title="View Reports">{{ $reservation->room->name }}</a>
 		            			</td>
@@ -111,6 +225,10 @@
   <script src="{{ asset('admin/dist/js/app.min.js') }}"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="{{ asset('admin/dist/js/demo.js') }}"></script>
+  <!-- Include Date Range Picker -->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
   <!-- page script -->
   <script>
     $(function () {
@@ -123,6 +241,67 @@
         "info": true,
         "autoWidth": false
       });
+
+      //Date range picker with time picker
+      $('#date_range').daterangepicker({
+        "showISOWeekNumbers": true,
+        "timePicker": true,
+        "autoUpdateInput": true,
+        "locale": {
+            "cancelLabel": 'Clear',
+            "format": "MMMM DD, YYYY h:mm A",
+            "separator": " - ",
+            "applyLabel": "Apply",
+            "cancelLabel": "Cancel",
+            "fromLabel": "From",
+            "toLabel": "To",
+            "customRangeLabel": "Custom",
+            "weekLabel": "W",
+            "daysOfWeek": [
+                "Su",
+                "Mo",
+                "Tu",
+                "We",
+                "Th",
+                "Fr",
+                "Sa"
+            ],
+            "monthNames": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            "firstDay": 1
+        },
+        "linkedCalendars": true,
+        "showCustomRangeLabel": false,
+        "startDate": 1,
+        "opens": "center"
+      });
     });
+
+    $('#date_range').daterangepicker().on('changeDate', function(){
+      $.ajax({
+        url: '{{ route('set_date_range') }}',
+        data: {date_range: $(this).val()},
+        dataType: 'json',
+        type: 'post'
+      })
+      .done(function(){
+        window.location.reload(true)
+      })
+      .fail(function(){
+        toastr.error("Failed! Something went wrong")
+      })
+    })
   </script>
 @endsection

@@ -24,7 +24,7 @@
       <small>Dashboard</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Guest Inquiries</a></li>
+      <li><a href="#"><i class="fa fa-comment-o"></i> Guest Inquiries</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>
@@ -33,51 +33,48 @@
   <section class="content">
     <div class="row">
       <div class="col-xs-8">
-          <!-- Chat box -->
+        <!-- Chat box -->
+        @foreach($inquiries as $value)
           <div class="box box-success">
             <div class="box-header">
-              <i class="fa fa-comments-o"></i>
-              <h3 class="box-title">Chat</h3>
-              <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
-                <div class="btn-group" data-toggle="btn-toggle" >
-                  <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i></button>
-                  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
-                </div>
-              </div>
+              <i class="fa fa-comment-o"></i>
+              <h3 class="box-title">Inquiry</h3>
             </div>
             <div class="box-body chat" id="chat-box">
               <!-- chat item -->
               <div class="item">
-                <img src="/admin/dist/img/user4-128x128.jpg" alt="user image" class="online">
+                <img src="{{ (!empty($value->guest->image->hash_name) && $value->same_as_profile) ? url('storage/image/'.$value->guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="user image" class="online">
                 <p class="message">
-                  <a href="#" class="name">
-                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
-                    Mike Doe
+                  <a href="{{ route('guest', $value->guest->id) }}" class="name">
+                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> {{ $value->created_at }}</small>
+                    {{ $value->name }}
                   </a>
-                  I would like to meet you to discuss the latest news about
-                  the arrival of the new theme. They say it is going to be one the
-                  best themes on the market
+                  {{ $value->message }}
                 </p>
+                @if($value->response)
                 <div class="attachment">
-                  <h4>Attachments:</h4>
+                  <h4>Response from Support:</h4>
                   <p class="filename">
-                    Theme-thumbnail-image.jpg
+                    {{ $value->response }}
                   </p>
-                  <div class="pull-right">
-                    <button class="btn btn-primary btn-sm btn-flat">Open</button>
-                  </div>
                 </div><!-- /.attachment -->
+                @endif
               </div><!-- /.item -->
             </div><!-- /.chat -->
             <div class="box-footer">
-              <div class="input-group">
-                <input class="form-control" placeholder="Type message...">
-                <div class="input-group-btn">
-                  <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+              <form action="{{ route('inquiries.update', $value->id) }}" method="post">
+                @csrf
+                @method('PUT')
+                <div class="input-group">
+                  <input class="form-control" placeholder="Your response..." name="response" required="">
+                  <div class="input-group-btn">
+                    <button class="btn btn-success"><i class="fa fa-send"></i>&nbsp;&nbsp;Save or Update</button>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div><!-- /.box (chat box) -->
+        @endforeach
       </div>
     </div>
   </section>
