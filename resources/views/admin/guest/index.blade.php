@@ -88,9 +88,9 @@
                           <ul class="dropdown-menu" role="menu">
                             <li><a href="{{ route('guest', $guest->id) }}">View Reports</a></li>
                             @if($guest->restricted)
-                              <li><a href="{{ route('unrestrict_user', encrypt($guest->id)) }}">Unrestrict Access</a></li>
+                              <li><a class="unrestrict" href="{{ route('unrestrict_user', encrypt($guest->id)) }}">Unrestrict Access</a></li>
                             @else
-                              <li><a href="{{ route('restrict_user', encrypt($guest->id)) }}">Restrict Access</a></li>
+                              <li><a class="restrict" href="{{ route('restrict_user', encrypt($guest->id)) }}">Restrict Access</a></li>
                             @endif
                             
                           </ul>
@@ -139,7 +139,7 @@
       });
     });
 
-    $('.restrict').on('click', function(evt){
+    $('a.restrict').on('click', function(evt){
       evt.preventDefault()
       let check = confirm("Are you sure you want to restrict this user?")
       if (check) {
@@ -148,7 +148,7 @@
       }
     })
 
-    $('.unrestrict').on('click', function(evt){
+    $('a.unrestrict').on('click', function(evt){
       evt.preventDefault()
       let check = confirm("Are you sure you want to unrestrict this user?")
       if (check) {

@@ -59,19 +59,19 @@
               </div><!-- /.col -->
               <div class="col-sm-3 border-right">
                 <div class="description-block">
-                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 2)->count() }}</h5>
+                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 3)->count() }}</h5>
                   <span class="description-text" style="font-size: 11px;">Check In</span>
                 </div><!-- /.description-block -->
               </div><!-- /.col -->
               <div class="col-sm-3 border-right">
                 <div class="description-block">
-                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 3)->count() }}</h5>
+                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 4)->count() }}</h5>
                   <span class="description-text" style="font-size: 11px;">Check Out</span>
                 </div><!-- /.description-block -->
               </div><!-- /.col -->
               <div class="col-sm-3">
                 <div class="description-block">
-                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 4)->count() }}</h5>
+                  <h5 class="description-header">{{ $guest->reservation->where('status_id', 2)->count() }}</h5>
                   <span class="description-text" style="font-size: 11px;">Cancelled</span>
                 </div><!-- /.description-block -->
               </div><!-- /.col -->

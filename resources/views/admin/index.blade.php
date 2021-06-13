@@ -83,8 +83,5 @@
   <script src="{{ asset('admin/dist/js/app.min.js') }}"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="{{ asset('admin/dist/js/demo.js') }}"></script>
-  <!-- fullCalendar 2.2.5 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-  <script src="{{ asset('admin/plugins/fullcalendar/fullcalendar.min.js') }}"></script>
   <!-- Page specific script -->
 @endsection

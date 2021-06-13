@@ -82,12 +82,23 @@
 		            <tbody>
 		            	@foreach($accomodation as $value)
 		            		<tr>
-		            			<td>{{ $value->name }}</td>
-		            			<td>{{ $value->description }}</td>
-		            			<td class="btn-group">
-		            				<button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></button>
-		            				<button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-		            			</td>
+		            			<td>
+                        <span>{{ $value->name }}</span>
+                        <input value="{{ $value->name }}" style="display: none" class="form-control name">
+                      </td>
+		            			<td>
+                        <span>{{ $value->description }}</span>
+                        <input value="{{ $value->description }}" style="display: none" class="form-control description">
+                      </td>
+                      <form action="{{ route('accomodation.destroy', $value->id) }}" method="post" class="delete">
+                        @csrf
+                        @method('DELETE')
+	            			    <td class="btn-group">
+  		            				<button type="button" class="btn btn-primary btn-sm edit"><i class="fa fa-edit"></i></button>
+                          <button type="button" class="btn btn-success btn-sm save" data-id="{{ $value->id }}" style="display: none;"><i class="fa fa-save"></i></button>
+  		            				<button type="submit" class="btn btn-danger btn-sm delete"><i class="fa fa-trash"></i></button>
+	            			    </td>
+                      </form>
 		            		</tr>
 		            	@endforeach
 		            </tbody>
@@ -129,5 +140,44 @@
         "autoWidth": false
       });
     });
+
+    $('button.edit').on('click', function(){
+      let element = $(this)
+      element.parent().siblings().find('input').show()
+      element.parent().siblings().find('span').hide()
+      element.siblings('button.save').show()
+      element.hide()
+    })
+
+    $('button.save').on('click', function(){
+      let element = $(this)
+      $.ajax({
+        url: '{{ route('accomodation.update', '') }}/'+element.data('id'),
+        data: {
+          name: element.parent().siblings().find('input.name').val(),
+          description: element.parent().siblings().find('input.description').val()
+        },
+        dataType: 'json',
+        type: 'post',
+        type: 'put'
+      })
+      .done(function(){
+        toastr.success("Accomodation updated successfully.")
+        window.location.reload(true)
+      })
+      .fail(function(){
+        toastr.error("Failed! Something went wrong")
+      })
+    })
+
+    $('button.delete').on('click', function(evt){
+      evt.preventDefault()
+      let element = $(this)
+      let check = confirm("Are you sure you want to delete this item?")
+      if (check) {
+        element.unbind('click')
+        evt.currentTarget.click();
+      }
+    })
   </script>
 @endsection

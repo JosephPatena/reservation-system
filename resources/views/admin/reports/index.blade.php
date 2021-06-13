@@ -57,7 +57,7 @@
           <div class="icon">
             <i class="fa fa-calendar-plus-o"></i>
           </div>
-          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="#" data-filter="Reserved" class="filter small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
 
@@ -71,7 +71,7 @@
           <div class="icon">
             <i class="fa fa-calendar-check-o"></i>
           </div>
-          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="#" data-filter="Check In" class="filter small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
 
@@ -85,7 +85,7 @@
           <div class="icon">
             <i class="fa fa-calendar-times-o"></i>
           </div>
-          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="#" data-filter="Check Out" class="filter small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
 
@@ -99,7 +99,7 @@
           <div class="icon">
             <i class="fa fa-calendar-minus-o"></i>
           </div>
-          <a href="{{ route('reports.index') }}" class="small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="#" data-filter="Cancelled" class="filter small-box-footer">View Reports <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
 
@@ -308,5 +308,12 @@
         toastr.error("Failed! Something went wrong")
       })
     })
+
+    var table = $('#example1').DataTable();
+ 
+    // #myInput is a <input type="text"> element
+    $('.filter').on('click', function(){
+        table.search( $(this).data('filter') ).draw();
+    });
   </script>
 @endsection
