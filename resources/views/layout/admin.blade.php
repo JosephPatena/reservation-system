@@ -257,6 +257,11 @@
                 @endif
               </a>
             </li>
+            <li class="{{ Request::is('content') ? "active" : "" }}">
+              <a href="{{ route('content.index') }}">
+                <i class="fa fa-cog"></i> <span>Content Management</span>
+              </a>
+            </li>
           </ul>
         </section>
         <!-- /.sidebar -->

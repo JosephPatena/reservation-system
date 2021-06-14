@@ -57,14 +57,13 @@
 
 @section('content')
 	
-	  <section class="site-hero site-hero-innerpage overlay" data-stellar-background-ratio="0.5" style="background-image: url(/guest/images/big_image_1.jpg);">
+	  <section class="site-hero site-hero-innerpage overlay" data-stellar-background-ratio="0.5" style="background-image: url('{{ Helper::get_contents()[0]->default ? asset('guest/images/big_image_1.jpg') : url('storage/image/' . Helper::get_contents()[0]->image->hash_name) }}');">
       <div class="container">
         <div class="row align-items-center site-hero-inner justify-content-center">
           <div class="col-md-12 text-center">
 
             <div class="mb-5 element-animate">
-              <h1>Reservation</h1>
-              <p>Discover our world's #1 Luxury Room For VIP.</p>
+              <h1>Book Now</h1>
             </div>
 
           </div>
@@ -72,7 +71,7 @@
       </div>
     </section>
     <!-- END section -->
-
+    @if(!empty($room))
     <section class="site-section" id="site-section">
       <div class="container">
         <div class="row">
@@ -154,7 +153,7 @@
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                   <ol class="carousel-indicators">
                     @foreach($room->images as $key => $image)
-                      <li data-target="#carouselExampleIndicators" data-slide-to="{{ $key }}" class="{{ $key==0 ? "active" : "" }}"></li>
+                      <li style="cursor: pointer;" data-target="#carouselExampleIndicators" data-slide-to="{{ $key }}" class="{{ $key==0 ? "active" : "" }}"></li>
                     @endforeach
                   </ol>
                   <div class="carousel-inner">
@@ -180,15 +179,15 @@
         </div>
       </div>
     </section>
+    @endif
     <!-- END section -->
 
-    <section class="section-cover" data-stellar-background-ratio="0.5" style="background-image: url(/guest/images/img_5.jpg);">
+    <section class="section-cover" data-stellar-background-ratio="0.5" style="background-image: url('{{ Helper::get_contents()[2]->default ? asset('guest/images/img_5.jpg') : url('storage/image/' . Helper::get_contents()[2]->image->hash_name) }}');">
       <div class="container">
         <div class="row justify-content-center align-items-center intro">
           <div class="col-md-9 text-center element-animate">
-            <h2>Relax and Enjoy your Holiday</h2>
-            <p class="lead mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto quidem tempore expedita facere facilis, dolores!</p>
-            <div class="btn-play-wrap"><a href="https://www.youtube.com/watch?v=9VDzhx0TB30" class="btn-play popup-vimeo "><span class="ion-ios-play"></span></a></div>
+            {!! Helper::get_contents()[2]->text !!}
+            <div class='btn-play-wrap'><a href='{{ Helper::get_contents()[2]->link }}' class='btn-play popup-vimeo '><span class='ion-ios-play'></span></a></div>
           </div>
         </div>
       </div>
@@ -199,7 +198,9 @@
 
 @section('scripts')
   <script type="text/javascript">
-    window.location.href = window.location.href + "#site-section"
+    var pathname = window.location.pathname;
+    var origin   = window.location.origin;
+    window.location.href = origin + pathname + "#site-section"
     
     $('input.date-range').on('change', function(){
       let element = $(this)

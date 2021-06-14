@@ -171,6 +171,6 @@
               return true;
       }
       $('img.change').attr("src", "{{ !empty(Helper::get_user()->image->hash_name) ? url('storage/image/'.Helper::get_user()->image->hash_name) : asset('admin/dist/img/default-user.png') }}");
-        })
+    })
   </script>
 @endsection

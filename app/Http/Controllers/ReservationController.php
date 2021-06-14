@@ -52,6 +52,11 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$this->check_availability($request)->original['status']){
+            toastr()->error("Ops! Looks like your are cheating HAHAHA. You can't do that, STOP!");
+            return redirect()->back();
+        }
+        
         Session::put('payment_method_id', $request->payment_method_id);
         Session::put('date_range', $request->date_range);
         Session::put('room_id', $request->room_id);

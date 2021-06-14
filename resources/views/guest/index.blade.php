@@ -2,16 +2,13 @@
 
 @section('content')
 
-  <section class="site-hero overlay" data-stellar-background-ratio="0.5" style="background-image: url(images/big_image_1.jpg);">
+  <section class="site-hero overlay" data-stellar-background-ratio="0.5" style="background-image: url('{{ Helper::get_contents()[0]->default ? asset('guest/images/big_image_1.jpg') : url('storage/image/' . Helper::get_contents()[0]->image->hash_name) }}');">
     <div class="container">
       <div class="row align-items-center site-hero-inner justify-content-center">
         <div class="col-md-12 text-center">
 
-          <div class="mb-5 element-animate">
-            <h1>Welcome To Our Luxury Rooms</h1>
-            <p>Discover our world's #1 Luxury Room For VIP.</p>
-            <p><a href="{{ route('reservation.create') }}" class="btn btn-primary">Book Now</a></p>
-          </div>
+          {!! Helper::get_contents()[0]->text !!}
+          <p><a href="{{ route('reservation.create') }}" class="btn btn-primary">Book Now</a></p>
 
         </div>
       </div>
@@ -23,16 +20,11 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-4">
-          <div class="heading-wrap text-center element-animate">
-            <h4 class="sub-heading">Stay with our luxury rooms</h4>
-            <h2 class="heading">Stay and Enjoy</h2>
-            <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus illo similique natus, a recusandae? Dolorum, unde a quibusdam est? Corporis deleniti obcaecati quibusdam inventore fuga eveniet! Qui delectus tempore amet!</p>
-            <p><a href="#" class="btn btn-primary btn-sm">More About Us</a></p>
-          </div>
+          {!! Helper::get_contents()[1]->text !!}
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-7">
-          <img src="images/f_img_1.png" alt="Image placeholder" class="img-md-fluid">
+          <img src="{{ Helper::get_contents()[1]->default ? asset('guest/images/f_img_1.png') : url('storage/image/' . Helper::get_contents()[1]->image->hash_name) }}" alt="Image placeholder" class="img-md-fluid">
         </div>
       </div>
     </div>
@@ -55,7 +47,7 @@
               <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                   @foreach($room->images as $key => $image)
-                    <li data-target="#carouselExampleIndicators" data-slide-to="{{ $key }}" class="{{ $key==0 ? "active" : "" }}"></li>
+                    <li style="cursor: pointer;" data-target="#carouselExampleIndicators" data-slide-to="{{ $key }}" class="{{ $key==0 ? "active" : "" }}"></li>
                   @endforeach
                 </ol>
                 <div class="carousel-inner">
@@ -102,13 +94,12 @@
   </section>
   @endif
   
-  <section class="section-cover" data-stellar-background-ratio="0.5" style="background-image: url(images/img_5.jpg);">
+  <section class="section-cover" data-stellar-background-ratio="0.5" style="background-image: url('{{ Helper::get_contents()[2]->default ? asset('guest/images/img_5.jpg') : url('storage/image/' . Helper::get_contents()[2]->image->hash_name) }}');">
     <div class="container">
       <div class="row justify-content-center align-items-center intro">
         <div class="col-md-9 text-center element-animate">
-          <h2>Relax and Enjoy your Holiday</h2>
-          <p class="lead mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto quidem tempore expedita facere facilis, dolores!</p>
-          <div class="btn-play-wrap"><a href="https://vimeo.com/channels/staffpicks/93951774" class="btn-play popup-vimeo "><span class="ion-ios-play"></span></a></div>
+          {!! Helper::get_contents()[2]->text !!}
+          <div class='btn-play-wrap'><a href='{{ Helper::get_contents()[2]->link }}' class='btn-play popup-vimeo '><span class='ion-ios-play'></span></a></div>
         </div>
       </div>
     </div>

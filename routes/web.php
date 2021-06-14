@@ -7,6 +7,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\PayMayaController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\BillingController;
@@ -115,7 +116,8 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	# Notification
 	Route::post('seen-notif', [ProfileController::class, 'seen_notif'])->name('seen_notif');
 	
-
+	# Content Management
+	Route::resource('content', ContentController::class);
 });
 
 /*

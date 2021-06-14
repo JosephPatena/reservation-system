@@ -7,6 +7,7 @@ use App\Models\OwnerCurrency;
 use App\Models\Accomodation;
 use App\Models\Reservation;
 use App\Models\Inquiry;
+use App\Models\Content;
 use App\Models\Image;
 use App\Models\Room;
 use App\Models\User;
@@ -25,6 +26,10 @@ class Helper
 
 	public static function get_payment_method(){
 		return PaymentMethod::all();
+	}
+
+	public static function get_contents(){
+		return Content::all();
 	}
 
 	public static function get_owner_currency(){
