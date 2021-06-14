@@ -45,13 +45,13 @@
 
 @section('content')
 
-	<section class="site-hero site-hero-innerpage overlay" data-stellar-background-ratio="0.5" style="background-image: url({{ asset('guest/images/big_image_1.jpg') }});">
+  <section class="site-hero site-hero-innerpage overlay" data-stellar-background-ratio="0.5" style="background-image: url({{ asset('guest/images/big_image_1.jpg') }});">
       <div class="container">
         <div class="row align-items-center site-hero-inner justify-content-center">
           <div class="col-md-12 text-center">
 
             <div class="mb-5 element-animate">
-              <h1>Contact Us</h1>
+              <h1>My Profile</h1>
               <p>Discover our world's #1 Luxury Room For VIP.</p>
             </div>
 
@@ -65,45 +65,61 @@
       <div class="container">
         <div class="row">
               <div class="col-md-6">
-                <h2 class="mb-5">Contact Form</h2>
-                <form action="{{ route('store_inquiry') }}" method="post">
+                <h2 class="mb-5">Basic Info</h2>
+                <form action="{{ route('update_profile') }}" method="post" enctype="multipart/form-data">
                   @csrf
+
+                  <input type="hidden" name="id" value="{{ encrypt(Auth::id()) }}">
                   <div class="row">
                     <div class="col-md-12 form-group">
-                      <label for="name">Name</label>
-                      <input type="text" id="name" class="form-control" name="name" required="" placeholder="Please enter your Name">
+                      <img class="change" src="{{ !empty(Helper::get_user()->image->hash_name) ? url('storage/image/'.Helper::get_user()->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="User Avatar" data-toggle="tooltip" title="Click to Change Photo" style="cursor: pointer; height: 150px; width: 150px; border-radius: 50%;">
+                      <input class="file" type="file" name="image" style="display: none;">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <label for="name">Full Name</label>
+                      <input type="text" id="name" class="form-control" name="name" required="" placeholder="Please enter your Full Name" value="{{ Auth::user()->name }}">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12 form-group">
                       <label for="phone">Phone</label>
-                      <input type="text" id="phone" class="form-control" name="phone" required="" placeholder="Please enter your Phone">
+                      <input type="text" id="phone" class="form-control" name="phone" required="" placeholder="Please enter your Phone" value="{{ Auth::user()->phone }}">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12 form-group">
                       <label for="email">Email</label>
-                      <input type="email" id="email" class="form-control" name="email" required="" placeholder="Please enter your Email">
+                      <input type="email" id="email" class="form-control" name="email" required="" placeholder="Please enter your Email" value="{{ Auth::user()->email }}">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12 form-group">
-                      <label for="message">Write Message</label>
-                      <textarea name="message" id="message" class="form-control " cols="30" rows="8" required="" placeholder="Please enter your Message"></textarea>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12 form-group">
+                      <br>
+                      <label for="toggle" style="cursor: pointer;">Change Password</label><br>
                       <label class="toggle">
-                          <input class="toggle__input" name="same_as_profile" type="checkbox" id="toggle">
+                          <input class="toggle__input" name="change_pass" type="checkbox" id="toggle">
                           <div class="toggle__fill"></div>
-                      </label><br>
-                      <label for="toggle" style="cursor: pointer;">Same as Profile?</label>
+                      </label>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <label for="password">Password</label>
+                      <input type="password" id="password" class="form-control" name="password" placeholder="Please enter your Password">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <label for="confirm_password">Retype Password</label>
+                      <input type="password" id="confirm_password" class="form-control" name="confirm_password" placeholder="Please retype your Password">
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-md-6 form-group">
-                      <input type="submit" value="Send Message" class="btn btn-primary">
+                      <input type="submit" value="Update Profile" class="btn btn-primary">
                     </div>
                   </div>
                 </form>
@@ -139,16 +155,16 @@
   <script type="text/javascript">
     window.location.href = window.location.href + "#site-section"
     
-    $('input.toggle__input').on('click', function(){
-      if ($(this).is(":checked")) {
-        $('input[name="name"]').val("{{ Auth::check() ? Auth::user()->name : "" }}")
-        $('input[name="phone"]').val("{{ Auth::check() ? Auth::user()->phone : "" }}")
-        $('input[name="email"]').val("{{ Auth::check() ? Auth::user()->email : "" }}")
-      }else{
-        $('input[name="name"]').val("")
-        $('input[name="phone"]').val("")
-        $('input[name="email"]').val("")
-      }
+    $('img.change').on('click', function(){
+      $('input.file').click()
     })
+
+    $('input.file').on('change', function(){
+      if (event.target.files[0]) {
+              $('img.change').attr("src", URL.createObjectURL(event.target.files[0]));
+              return true;
+      }
+      $('img.change').attr("src", "{{ !empty(Helper::get_user()->image->hash_name) ? url('storage/image/'.Helper::get_user()->image->hash_name) : asset('admin/dist/img/default-user.png') }}");
+        })
   </script>
 @endsection

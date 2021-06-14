@@ -18,7 +18,7 @@
     </section>
     <!-- END section -->
 
-    <section class="site-section">
+    <section class="site-section" id="site-section">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -28,13 +28,13 @@
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="email">Email</label>
-                  <input type="email" id="email" class="form-control" value="{{ old('email') }}" name="email">
+                  <input type="email" id="email" class="form-control" value="{{ old('email') }}" name="email" placeholder="Please enter your Email" required="">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="password">Password</label>
-                  <input type="password" id="password" class="form-control" value="{{ old('password') }}" name="password">
+                  <input type="password" id="password" class="form-control" value="{{ old('password') }}" name="password" placeholder="Please enter your Password" required="">
                 </div>
               </div>
               <div class="row">
@@ -68,5 +68,9 @@
       </div>
     </section>
     <!-- END section -->
+
+    <script type="text/javascript">
+      window.location.href = window.location.href + "#site-section"
+    </script>
 
 @endsection

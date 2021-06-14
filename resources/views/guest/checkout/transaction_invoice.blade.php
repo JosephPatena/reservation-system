@@ -194,7 +194,7 @@
     </section>
     <!-- END section -->
 
-    <section class="site-section">
+    <section class="site-section" id="site-section">
       <div class="row">
         <div class="col-md-12">
           <div class="invoice-container">
@@ -207,7 +207,7 @@
                 <p class="date" style="width: 700px">Name: {{ $reservation->guest->name }} <br> Phone: {{ $reservation->guest->phone }} <br> Email: {{ $reservation->guest->email }}<br> Payment method: {{ $reservation->payment_method->name }}</p>
               </div>
               <div class="space"></div>
-              <p class="invoice-number">#{{ $reservation->invoice_no }}</p>
+              <p class="invoice-number"><span style="color: #000;">#</span>{{ $reservation->invoice_no }}</p>
             </div>
             <div class="invoice-body">
               <table>
@@ -216,7 +216,7 @@
                   <th>PRICE</th>
                   <th>ARRIVAL DATE</th>
                   <th>DEPARTURE DATE</th>
-                  <th>LENGTH OF STAY (DAY)</th>
+                  <th>LENGTH STAY (day)</th>
                   <th>SUBTOTAL</th>
                 </thead>
 
@@ -253,4 +253,7 @@
     </section>
     <!-- END section -->
 
+    <script type="text/javascript">
+      window.location.href = window.location.href + "#site-section"
+    </script>
 @endsection

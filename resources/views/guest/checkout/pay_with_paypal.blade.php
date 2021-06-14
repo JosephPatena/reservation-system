@@ -18,7 +18,7 @@
     </section>
     <!-- END section -->
 
-    <section class="site-section">
+    <section class="site-section" id="site-section">
       <div class="container">
         <div class="row">
           <div class="col-md-8">
@@ -35,7 +35,7 @@
                         <th>MAX GUEST</th>
                         <th>NO OF ROOM</th>
                         <th>PRICE</th>
-                        <th>LENGTH OF STAY (DAY)</th>
+                        <th>LENGTH STAY (day)</th>
                         <th>TOTAL</th>
                       </tr>
                     </thead>
@@ -45,8 +45,8 @@
                         <td>{{ $room->no_of_person }}</td>
                         <td>{{ $room->no_of_room }}</td>
                         <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($room->price, 2) }}</td>
-                        <td>1</td>
-                        <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($room->price, 2) }}</td>
+                        <td>{{ $length_stay }}</td>
+                        <td>{{ Helper::get_owner_currency()->currency->symbol . number_format(($room->price * $length_stay), 2) }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -60,6 +60,10 @@
                     <label class="status" style="color: lime"><i class="ion-checkmark">&nbsp;&nbsp;Available</i></label>
                 </div>
 
+                <div class="col-sm-4">
+                  <h4 style="float: right; border: solid thin red; padding: 15px; font-family: Courier;">Total <br>{{ Helper::get_owner_currency()->currency->symbol . number_format(($room->price * $length_stay), 2) }}</h4>
+                </div>
+
                 <div class="col-sm-8 form-group">
                   <div id="paypal-button-container"></div>
                 </div>
@@ -69,20 +73,26 @@
             </form>
           </div>
           <div class="col-md-4">
-            <h3 class="mb-5">Room</h3>
+            <h3 class="mb-5"><a href="{{ route('room_type', $room->accomodation_id) }}">{{ $room->accomodation->name }}</a></h3>
             <div class="media d-block room mb-0">
               <figure>
-                <img src="{{ url('storage/image/'.$room->images->first()->hash_name) }}" alt="Room Image" class="img-fluid">
-                <div class="overlap-text">
-                  <span>
-                    <span class="ion-ios-star"></span>
-                    <span class="ion-ios-star"></span>
-                    <span class="ion-ios-star"></span>
-                  </span>
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                  <ol class="carousel-indicators">
+                    @foreach($room->images as $key => $image)
+                      <li data-target="#carouselExampleIndicators" data-slide-to="{{ $key }}" class="{{ $key==0 ? "active" : "" }}"></li>
+                    @endforeach
+                  </ol>
+                  <div class="carousel-inner">
+                    @foreach($room->images as $key => $image)
+                      <div class="carousel-item {{ $key==0 ? "active" : "" }}">
+                        <img class="d-block w-100" src="{{ url('storage/image/' . $image->hash_name) }}" alt="Room Image">
+                      </div>
+                    @endforeach
+                  </div>
                 </div>
               </figure>
               <div class="media-body">
-                <h3 class="mt-0"><a href="{{ route('room_type', $room->accomodation_id) }}">{{ $room->accomodation->name }}</a></h3>
+                <h3 class="mt-0"><a href="{{ route('room_details', $room->id) }}">{{ $room->name }}</a></h3>
                 <ul class="room-specs">
                   <li><span class="ion-ios-people-outline"></span> {{ $room->no_of_person }} Guests</li>
                   <li><span class="ion-ios-crop"></span> {{ $room->no_of_room }} Room</li>
@@ -115,6 +125,8 @@
 @section('scripts')
   <script src="https://www.paypal.com/sdk/js?client-id={{ $payment_method->public_key }}&currency={{ Helper::get_owner_currency()->currency->iso_code }}"></script>
   <script>
+    window.location.href = window.location.href + "#site-section"
+
     paypal.Buttons({
       // Call your server to set up the transaction
       createOrder: function(data, actions) {

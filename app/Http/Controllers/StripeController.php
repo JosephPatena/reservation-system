@@ -23,7 +23,7 @@ class StripeController extends Controller
           header('Content-Type: application/json');
 
           $paymentIntent = \Stripe\PaymentIntent::create([
-            'amount' => round($this->compute_total()) * 100,
+            'amount' => round($this->compute_total()),
             'currency' => Helper::get_owner_currency()->currency->iso_code,
           ]);
 

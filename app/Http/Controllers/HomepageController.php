@@ -13,6 +13,7 @@ class HomepageController extends Controller
     }
 
     public function guest_homepage(){
-    	return view('guest.index');
+        $room = Room::where('is_available', true)->inRandomOrder()->first();
+    	return view('guest.index', compact('room'));
     }
 }

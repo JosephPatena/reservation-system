@@ -47,37 +47,42 @@
             <ul class="navbar-nav ml-auto pl-lg-5 pl-0">
               
               <li class="nav-item">
-                <a class="nav-link active" href="/">Home</a>
+                <a class="nav-link {{ Request::is('guest/homepage') ? "active" : "" }}" href="/">Home</a>
               </li>
               
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="rooms" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rooms</a>
+              <li class="nav-item dropdown {{ Request::is('room') ? "active" : "" }}">
+                <a class="nav-link dropdown-toggle" href="{{ route('room') }}" id="rooms" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rooms</a>
                 <div class="dropdown-menu" aria-labelledby="rooms">
-                  <a class="dropdown-item" href="{{ route('room') }}">All</a>
+                  <a class="dropdown-item {{ Request::is('room') ? "active" : "" }}" href="{{ route('room') }}">All</a>
                   @foreach(Helper::get_accomodation() as $accomodation)
-                    <a class="dropdown-item" href="{{ route('room_type', $accomodation->id) }}">{{ $accomodation->name }}</a>
+                    <a class="dropdown-item {{ Request::is('room/type/'.$accomodation->id) ? "active" : "" }}" href="{{ route('room_type', $accomodation->id) }}">{{ $accomodation->name }}</a>
                   @endforeach
                 </div>
               </li>
               
-              <li class="nav-item">
+              <li class="nav-item {{ Request::is('about') ? "active" : "" }}">
                 <a class="nav-link" href="{{ route('about') }}">About</a>
               </li>
               
-              <li class="nav-item">
+              <li class="nav-item {{ Request::is('contact') ? "active" : "" }}">
                 <a class="nav-link" href="{{ route('contact') }}">Contact</a>
               </li>
 
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown {{ Request::is('login') || Request::is('register') ? "active" : "" }}">
                 <a class="nav-link dropdown-toggle" href="#" id="account" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
                 <div class="dropdown-menu" aria-labelledby="account">
-                  <a class="dropdown-item" href="{{ route('room') }}">My Profile</a>
-                  <a class="dropdown-item" href="{{ route('room') }}">My Reservation</a>
-                  <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                  @if(Auth::check())
+                    <a class="dropdown-item {{ Request::is('guest/my-profile') ? "active" : "" }}" href="{{ route('my_profile') }}">My Profile</a>
+                    <a class="dropdown-item {{ Request::is('reservation') ? "active" : "" }}" href="{{ route('reservation.index') }}">My Reservation</a>
+                    <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                  @else
+                    <a class="dropdown-item {{ Request::is('login') ? "active" : "" }}" href="{{ route('login') }}">Login</a>
+                    <a class="dropdown-item {{ Request::is('register') ? "active" : "" }}" href="{{ route('register') }}">Register</a>
+                  @endif
                 </div>
               </li>
 
-              <li class="nav-item cta">
+              <li class="nav-item cta {{ Request::is('reservation/create') ? "active" : "" }}">
                 <a class="nav-link" href="{{ route('reservation.create') }}"><span>Book Now</span></a>
               </li>
 
@@ -124,9 +129,7 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-7 text-center">
-            &copy; <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved. Reservation <b>System</b> | R<b>S</b>
           </div>
         </div>
       </div>

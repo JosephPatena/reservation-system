@@ -41,20 +41,33 @@
           </div><!-- /.box-body -->
         </div><!-- /. box -->
       </div><!-- /.col -->
-      <div class="col-md-1"></div>
-      <div class="col-md-2">
-        <!-- small box -->
-        <div class="box box-info">
-          <div class="box-header with-border">
-            <h3 class="box-title">Legend</h3>
-          </div><!-- /.box-header -->
-          <div class="box-body row" style="text-align: center;">
-              <span class="label bg-aqua">Reserved</span>
-              <span class="label bg-green">Check In</span>
-              <span class="label bg-yellow">Check Out</span>
-              <span class="label bg-red">Cancelled</span>
-          </div><!-- /.box-body -->
-        </div><!-- /.box -->
+      <div class="col-md-2"></div>
+      <div class="col-md-1">
+        <label>LEGEND</label>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <span class="label bg-aqua">Reserved</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="label bg-green">Check In</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="label bg-yellow">Check Out</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="label bg-red">Cancelled</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div><!-- /.row -->
   </section><!-- /.content -->

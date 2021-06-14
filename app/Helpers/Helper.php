@@ -31,7 +31,21 @@ class Helper
 		return OwnerCurrency::first();
 	}
 
-	public static function check_availability($room){
+	public static function check_availability($room_id){
+
+		if (!Room::findOrFail($room_id)->is_available) {
+			return "bg-maroon";
+		} elseif(Reservation::where('status_id', 3)->where('room_id', $room_id)->count()) {
+			return "bg-green";
+		} elseif (Reservation::where('status_id', 1)->where('room_id', $room_id)->count()) {
+			return "bg-aqua";
+		} elseif (Reservation::where('status_id', 2)->where('room_id', $room_id)->whereDate('created_at', '>', Carbon::today()->format('Y-m-d'))->count()) {
+			return "bg-red";
+		} elseif (Reservation::where('status_id', 4)->where('room_id', $room_id)->count()) {
+			return "bg-yellow";
+		} else {
+			return "bg-blue";
+		}
 		
 	}
 

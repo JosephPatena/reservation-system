@@ -18,6 +18,10 @@ trait ReservationTrait {
 
         $room = Room::findOrFail(decrypt(Session::get('room_id')));
 
+        if (decrypt(Session::get('payment_method_id'))==3) {
+            return ($room->price * ($different_days + 1)) * 100;
+        }
+
         return $room->price * ($different_days + 1);
 	}
 }

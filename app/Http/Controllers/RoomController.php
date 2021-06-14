@@ -127,17 +127,6 @@ class RoomController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit()
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -236,5 +225,11 @@ class RoomController extends Controller
     {
         $rooms = Room::all();
         return view('guest.room', compact('rooms'));
+    }
+
+    public function details($id)
+    {
+        $room = Room::findOrFail($id);
+        return view('guest.room_details', compact('room'));
     }
 }

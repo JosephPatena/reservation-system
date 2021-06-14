@@ -8,7 +8,7 @@
           <div class="col-md-12 text-center">
 
             <div class="mb-5 element-animate">
-              <h1>Book Now</h1>
+              <h1>Register Now</h1>
               <p>Discover our world's #1 Luxury Room For VIP.</p>
             </div>
 
@@ -18,7 +18,7 @@
     </section>
     <!-- END section -->
 
-    <section class="site-section">
+    <section class="site-section" id="site-section">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -28,31 +28,31 @@
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="name">Name</label>
-                  <input type="text" id="name" class="form-control" value="{{ old('name') }}" name="name">
+                  <input type="text" id="name" class="form-control" value="{{ old('name') }}" name="name" placeholder="Please enter your Full Name" required="">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="email">Email</label>
-                  <input type="email" id="email" class="form-control" value="{{ old('email') }}" name="email">
+                  <input type="email" id="email" class="form-control" value="{{ old('email') }}" name="email" placeholder="Please enter your Email" required="">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="phone">Phone</label>
-                  <input type="text" id="phone" class="form-control" value="{{ old('phone') }}" name="phone">
+                  <input type="text" id="phone" class="form-control" value="{{ old('phone') }}" name="phone" placeholder="Please enter your Phone" required="">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="password">Password</label>
-                  <input type="password" id="password" class="form-control" value="{{ old('password') }}" name="password">
+                  <input type="password" id="password" class="form-control" value="{{ old('password') }}" name="password" placeholder="Please enter your Password" required="">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="retype_password">Retype Password</label>
-                  <input type="password" id="retype_password" class="form-control" value="{{ old('retype_password') }}" name="retype_password">
+                  <input type="password" id="retype_password" class="form-control" value="{{ old('retype_password') }}" name="retype_password" placeholder="Please retype your Password" required="">
                 </div>
               </div>
               <div class="row">
@@ -86,5 +86,9 @@
       </div>
     </section>
     <!-- END section -->
+
+    <script type="text/javascript">
+      window.location.href = window.location.href + "#site-section"
+    </script>
 
 @endsection

@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <section class="site-hero overlay" data-stellar-background-ratio="0.5" style="background-image: url(images/big_image_1.jpg);">
+  <section class="site-hero overlay" data-stellar-background-ratio="0.5" style="background-image: url('../../guest/images/big_image_1.jpg');">
     <div class="container">
       <div class="row align-items-center site-hero-inner justify-content-center">
         <div class="col-md-12 text-center">
@@ -19,33 +19,13 @@
   </section>
   <!-- END section -->
 
-  <section class="site-section">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-4">
-          <div class="heading-wrap text-center element-animate">
-            <h4 class="sub-heading">Stay with our luxury rooms</h4>
-            <h2 class="heading">Stay and Enjoy</h2>
-            <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus illo similique natus, a recusandae? Dolorum, unde a quibusdam est? Corporis deleniti obcaecati quibusdam inventore fuga eveniet! Qui delectus tempore amet!</p>
-            <p><a href="#" class="btn btn-primary btn-sm">More About Us</a></p>
-          </div>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-7">
-          <img src="images/f_img_1.png" alt="Image placeholder" class="img-md-fluid">
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- END section -->
-
   @if(!empty($room))
-  <section class="site-section bg-light">
+  <section class="site-section bg-light" id="site-section">
     <div class="container">
       <div class="row mb-5">
         <div class="col-md-12 heading-wrap text-center">
           <h4 class="sub-heading">{{ $room->accomodation->name }}</h4>
-            <h2 class="heading">Featured Room</h2>
+            <h2 class="heading">Room Details</h2>
         </div>
       </div>
       <div class="row ">
@@ -114,5 +94,9 @@
     </div>
   </section>
   <!-- END section -->
+
+  <script type="text/javascript">
+    window.location.href = window.location.href + "#site-section"
+  </script>
    
 @endsection

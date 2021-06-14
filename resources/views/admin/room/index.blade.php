@@ -188,7 +188,11 @@
             
               <h3><small>Room <br> No.</small> <b>{{ $value->no }}</b></h3>
               <i class="fa fa-folder-open-o open-url" data-url="{{ route('rooms.show', $value->id) }}" style="float: right; cursor: pointer;" data-toggle="tooltip" title="View / Edit details"></i>
-              <h5>{{ $value->name }}</h5>
+              <h5>{{ $value->name }} &nbsp;&nbsp;
+                @if(!$value->is_available)
+                  <span class="label bg-maroon">Under Maintenance</span>
+                @endif
+              </h5>
             </div>
             <div id="carousel-example-generic-{{ $key }}" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">

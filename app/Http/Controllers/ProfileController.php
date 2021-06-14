@@ -18,6 +18,11 @@ class ProfileController extends Controller
         return view('admin.profile.index');
     }
 
+    public function my_profile(){
+
+        return view('guest.profile');
+    }
+
     public function update_profile(Request $request){
         $email_validation = array('required', 'string', 'max:255', 'unique:users');
         if (Auth::user()->email == $request->email)
@@ -37,7 +42,8 @@ class ProfileController extends Controller
 
         User::findOrFail(decrypt($request->id))->update([
             'name' => $request->name,
-            'email' => $request->email
+            'email' => $request->email,
+            'phone' => $request->phone ? $request->phone : NULL
         ]);
 
         if(isset($request->change_pass)){

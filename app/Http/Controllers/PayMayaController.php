@@ -52,7 +52,7 @@ class PayMayaController extends Controller
         $itemCheckout->buyer = $user->buyerInfo();
         $itemCheckout->items = array($item);
         $itemCheckout->totalAmount = $itemAmount;
-        $itemCheckout->requestReferenceNumber = date("siHymd");
+        $itemCheckout->requestReferenceNumber = "RSN".date("siHymd");
         $itemCheckout->redirectUrl = array(
             "success" => route('setup_completion'),
             "failure" => route('reservation.create'),

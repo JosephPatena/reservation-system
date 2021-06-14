@@ -19,7 +19,7 @@
     <!-- END section -->
 
 
-    <section class="site-section">
+    <section class="site-section" id="site-section">
       <div class="container">
         <div class="row">
           <div class="col-md-12 mb-4">
@@ -49,5 +49,9 @@
       </div>
     </section>
     <!-- END section -->
+
+    <script type="text/javascript">
+      window.location.href = window.location.href + "#site-section"
+    </script>
 
 @endsection

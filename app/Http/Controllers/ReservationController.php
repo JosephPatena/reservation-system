@@ -22,7 +22,8 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        //
+        $reservations = Reservation::where('user_id', Auth::id())->latest()->get();
+        return view('guest.reservation', compact('reservations'));
     }
 
     /**
@@ -55,15 +56,23 @@ class ReservationController extends Controller
         Session::put('date_range', $request->date_range);
         Session::put('room_id', $request->room_id);
 
+        $date_range = explode("-", $request->date_range);
+        $arrival_date = Carbon::parse($date_range[0])->format('Y-m-d H:i:s');
+        $departure_date = Carbon::parse($date_range[1])->format('Y-m-d H:i:s');
+
+        $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $arrival_date);
+        $end_date = Carbon::createFromFormat('Y-m-d H:i:s', $departure_date);
+        $length_stay = $start_date->diffInDays($end_date) + 1;
+
         $payment_method = PaymentMethod::findOrFail(decrypt($request->payment_method_id));
         $room = Room::findOrFail(decrypt($request->room_id));
 
         if (decrypt($request->payment_method_id) == 1) {
             return redirect()->route('setup_completion');
         } else if (decrypt($request->payment_method_id) == 2) {
-            return view('guest.checkout.pay_with_paypal', compact('payment_method', 'room'));
+            return view('guest.checkout.pay_with_paypal', compact('payment_method', 'room', 'length_stay'));
         } else if (decrypt($request->payment_method_id) == 3) {
-            return view('guest.checkout.pay_with_stripe', compact('payment_method', 'room'));
+            return view('guest.checkout.pay_with_stripe', compact('payment_method', 'room', 'length_stay'));
         } else if (decrypt($request->payment_method_id) == 4) {
             return redirect()->route('paymaya.create_order');
         }
@@ -91,27 +100,54 @@ class ReservationController extends Controller
 
         $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $arrival_date);
         $end_date = Carbon::createFromFormat('Y-m-d H:i:s', $departure_date);
+        $length_stay = $start_date->diffInDays($end_date) + 1;
+        $total = Room::findOrFail(decrypt($request->room_id))->price * $length_stay;
 
         if (!Room::findOrFail(decrypt($request->room_id))->is_available) {
-            return response()->json(['status' => false, 'message' => 'The room is under maintenance.']);
+            return response()->json([
+                'status' => false, 
+                'message' => 'The room is under maintenance.',
+                'length_stay' => $length_stay,
+                'total' => $total
+            ]);
         }
 
-        if (Room::findOrFail(decrypt($request->room_id))->max_length_stay < ($start_date->diffInDays($end_date)+1)) {
-            return response()->json(['status' => false, 'message' => 'You cannot choose higher than the max length of stay.']);
+        if (Room::findOrFail(decrypt($request->room_id))->max_length_stay < $length_stay) {
+            return response()->json([
+                'status' => false, 
+                'message' => 'You cannot choose higher than the max length of stay.',
+                'length_stay' => $length_stay,
+                'total' => $total
+            ]);
         }
 
         foreach($reservations as $reservation){
             if (Reservation::whereBetween('arrival_date', [$arrival_date, $departure_date])->count()) {
-                return response()->json(['status' => false, 'message' => 'Not Available. The selected date is Closed to Arrival (CTA)']);
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Not Available. The selected date is Closed to Arrival (CTA)',
+                    'length_stay' => $length_stay,
+                    'total' => $total
+                ]);
             }
             
             if (Reservation::whereBetween('departure_date', [$arrival_date, $departure_date])->count()) {
-                return response()->json(['status' => false, 'message' => 'Not Available. The selected date is Closed to Departure (CTD)']);
+                return response()->json([
+                    'status' => false, 
+                    'message' => 'Not Available. The selected date is Closed to Departure (CTD)',
+                    'length_stay' => $length_stay,
+                    'total' => $total
+                ]);
             }
             
         }
        
-        return response()->json(['status' => true, 'message' => 'Available']);
+        return response()->json([
+            'status' => true, 
+            'message' => 'Available', 
+            'length_stay' => $length_stay,
+            'total' => $total
+        ]);
     }
 
     public function setup_completion(){
@@ -124,7 +160,7 @@ class ReservationController extends Controller
         $end_date = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date_range[1])->format('Y-m-d H:i:s'));
 
         $new = Reservation::create([
-            'invoice_no' => "TRN".date("siHymd"),
+            'invoice_no' => "RSN".date("siHymd"),
             'user_id' => Auth::id(),
             'room_id' => decrypt(Session::get('room_id')),
             'payment_method_id' => decrypt(Session::get('payment_method_id')),

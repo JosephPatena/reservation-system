@@ -75,9 +75,9 @@
                         @endif
                       </td>
                       <td>{{ $guest->reservation->where('status_id', 1)->count() }}</td>
-                      <td>{{ $guest->reservation->where('status_id', 2)->count() }}</td>
                       <td>{{ $guest->reservation->where('status_id', 3)->count() }}</td>
                       <td>{{ $guest->reservation->where('status_id', 4)->count() }}</td>
+                      <td>{{ $guest->reservation->where('status_id', 2)->count() }}</td>
                       <td>
                         <div class="btn-group">
                           <button type="button" class="btn btn-primary btn-sm">Action</button>

@@ -62,6 +62,7 @@ Route::group(['middleware' => 'guest'], function(){
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 	Route::post('check-password', [AuthController::class, 'check_password'])->name('check_password');
+	Route::post('update_profile', [ProfileController::class, 'update_profile'])->name('update_profile');
 });
 
 /*
@@ -72,7 +73,6 @@ Route::group(['middleware' => 'auth'], function(){
 Route::group(['middleware' => ['admin', 'auth']], function(){
 	# Profile
 	Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
-	Route::post('update_profile', [ProfileController::class, 'update_profile'])->name('update_profile');
 	
 	# Homepage
 	Route::get('admin/homepage', [HomepageController::class, 'admin_homepage'])->name('admin_homepage');
@@ -134,6 +134,7 @@ Route::group(['middleware' => ['unauthenticated_or_visitor']], function(){
 	# Room
 	Route::get('room/type/{accomodation_id}', [RoomController::class, 'room_type'])->name('room_type');
 	Route::get('room', [RoomController::class, 'room'])->name('room');
+	Route::get('room/details/{id}', [RoomController::class, 'details'])->name('room_details');
 });
 
 /*
@@ -164,6 +165,9 @@ Route::group(['middleware' => ['visitor', 'auth', 'restriction']], function(){
 	# Inquiries
 	Route::get('my-inquiries', [InquiryController::class, 'my_inquiries'])->name('my_inquiries');
 	Route::post('store-inquiry', [InquiryController::class, 'store_inquiry'])->name('store_inquiry');
+
+	# Profile
+	Route::get('guest/my-profile', [ProfileController::class, 'my_profile'])->name('my_profile');
 });
 
 /*
