@@ -130,7 +130,12 @@
                         @endif
                       </td>
                       <td>{{ $reservation->payment_method->name }}</td>
-                      <td><a href="{{ route('transaction_invoice', encrypt($reservation->id)) }}" class="btn btn-primary btn-sm">View Invoice</a></td>
+                      <td>
+                        @if(!$reservation->request_cancellation)
+                          <a style="cursor: pointer;" class="cancel" data-toggle="modal" data-target="#cancel-form" data-id="{{ encrypt($reservation->id) }}">Request Cancellation</a><br>
+                        @endif
+                        <a href="{{ route('transaction_invoice', encrypt($reservation->id)) }}">View Invoice</a>
+                      </td>
                     </tr>
                   @endforeach
               </tbody>
@@ -152,10 +157,96 @@
       </div>
     </section>
     <!-- END section -->
-    <script type="text/javascript">
-      var pathname = window.location.pathname;
-      var origin   = window.location.origin;
-      window.location.href = origin + pathname + "#site-section"
-    </script>
+    
+    <div class="modal fade" id="cancel-form">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Request Cancellation</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <form action="{{ route('cancel') }}" method="post" class="cancellation">
+            @csrf
+            @method('PUT')
+            <div class="modal-body">
+              <div class="form-horizontal">
+                
+                <input type="hidden" name="id" class="id">
+                <div class="form-group row">
+                  <label for="inputCancellation" class="col-sm-4 control-label">Cancellation Reason <span style="color: red;">*</span></label>
+                  <div class="col-sm-8">
+                    <textarea  name="reason" type="text" class="form-control" id="inputCancellation" placeholder="Please tell us your reason" required="">{{ old('reason') }}</textarea>
+                  </div>
+                </div>
 
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary btn-sm">Proceed</button>
+            </div>
+          </form>
+
+          <form class="check" style="display: none;">
+            <div class="modal-body">
+              <div class="form-horizontal">
+
+                <div class="form-group row">
+                  <label for="inputPass" class="col-sm-4 control-label">Password <span style="color: red;">*</span></label>
+                  <div class="col-sm-8">
+                    <input  name="password" type="password" class="form-control" id="inputPass" placeholder="Please enter your password" required="">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary btn-sm">Proceed</button>
+            </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+@endsection
+
+@section('scripts')
+  <script type="text/javascript">
+    var pathname = window.location.pathname;
+    var origin   = window.location.origin;
+    window.location.href = origin + pathname + "#site-section"
+
+    $(document).on('click', '.cancel', function(){
+      $('input.id').val($(this).data('id'))
+    })
+
+    $(document).on('submit', 'form.cancellation', function(evt){
+      evt.preventDefault()
+      $(this).hide()
+      $(this).siblings().show()
+    })
+
+    $(document).on('submit', 'form.check', function(evt){
+      evt.preventDefault()
+      let element = $(this)
+
+      $.ajax({
+        url: "{{ route('check_password') }}",
+        data: $(this).serialize(),
+        dataType: "json",
+        type: "post"
+      })
+      .done(function(correct){
+        if (correct) {
+          console.log(element.siblings())
+          element.siblings()[1].submit()
+        }else{
+          toastr.error("Password is incorrect")
+        }
+      })
+      .fail(function(){
+        toastr.error("Failed! Something went wrong")
+      })
+    })
+  </script>
 @endsection

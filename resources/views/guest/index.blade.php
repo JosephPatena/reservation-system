@@ -77,9 +77,6 @@
               <div class="overlap-text">
                 <span>
                   {{ $room->accomodation->name }} 
-                  <span class="ion-ios-star"></span>
-                  <span class="ion-ios-star"></span>
-                  <span class="ion-ios-star"></span>
                 </span>
                 <span class="pricing-from">
                   from {{ Helper::get_owner_currency()->currency->symbol . number_format($room->price, 2) }}

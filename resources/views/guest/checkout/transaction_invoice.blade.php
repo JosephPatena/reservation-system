@@ -197,7 +197,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="invoice-container">
-            <i class="ion-ios-printer-outline open-url" data-url="{{ route('print_invoice', encrypt($reservation->id)) }}" style="cursor: pointer;">&nbsp;&nbsp;Print</i>
+            {{-- <i class="ion-ios-printer-outline open-url" data-url="{{ route('print_invoice', encrypt($reservation->id)) }}" style="cursor: pointer;">&nbsp;&nbsp;Print</i> --}}
             <div class="invoice-header">
               <div class="title-date">
                 <h2 class="title">INVOICE</h2>

@@ -25,6 +25,8 @@ class CreateReservationsTable extends Migration
             $table->integer('length_of_stay');
             $table->foreignId('status_id')->constrained()->onDelete('cascade');
             $table->boolean('seen')->default(false);
+            $table->boolean('request_cancellation')->default(false);
+            $table->longText('cancellation_reason')->nullable();
             $table->timestamps();
         });
     }

@@ -111,6 +111,7 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 
 	# Reservation
 	Route::get('manage/reservation', [ReservationController::class, 'manage_reservation'])->name('manage_reservation');
+	Route::get('cancellation/request', [ReservationController::class, 'cancellation_request'])->name('cancellation_request');
 	Route::post('set-status', [ReservationController::class, 'set_status'])->name('set_status');
 
 	# Notification
@@ -149,6 +150,7 @@ Route::group(['middleware' => ['visitor', 'auth', 'restriction']], function(){
 	Route::resource('reservation', ReservationController::class);
 	Route::get('reservation/create/{id}', [ReservationController::class, 'create'])->name('reservation_create');
 	Route::post('check-availability', [ReservationController::class, 'check_availability'])->name('check_availability');
+	Route::put('cancel', [ReservationController::class, 'cancel'])->name('cancel');
 
 	# CHECKOUT #
 	# PayPal
@@ -165,7 +167,7 @@ Route::group(['middleware' => ['visitor', 'auth', 'restriction']], function(){
 	Route::get('print-invoice/{id}', [ReservationController::class, 'print_invoice'])->name('print_invoice');
 
 	# Inquiries
-	Route::get('my-inquiries', [InquiryController::class, 'my_inquiries'])->name('my_inquiries');
+	Route::get('guest/inquiries', [InquiryController::class, 'my_inquiries'])->name('my_inquiries');
 	Route::post('store-inquiry', [InquiryController::class, 'store_inquiry'])->name('store_inquiry');
 
 	# Profile

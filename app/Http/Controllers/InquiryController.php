@@ -33,10 +33,6 @@ class InquiryController extends Controller
         return redirect()->back();
     }
 
-    public function my_inquiries(){
-
-    }
-
     public function store_inquiry(Request $request){
         $request->request->add(['user_id' => Auth::id()]);
         if ($request->same_as_profile=="on") {
@@ -49,5 +45,10 @@ class InquiryController extends Controller
 
         toastr()->success("Your inquiry sent successfully.");
         return redirect()->back();
+    }
+
+    public function my_inquiries(){
+        $inquiries = Inquiry::where('user_id', Auth::id())->latest()->get();
+        return view('guest.inquiries', compact('inquiries'));
     }
 }

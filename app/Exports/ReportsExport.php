@@ -7,6 +7,8 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Collection;
 use App\Models\Reservation;
+use Carbon\Carbon;
+use Session;
 
 class ReportsExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
@@ -16,7 +18,18 @@ class ReportsExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function collection()
     {
         $filtered = new Collection;
-        Reservation::each(function($item) use ($filtered){
+
+        if (Session::has('date_range')) {
+            $range = explode("-", Session::get('date_range'));
+            $from = Carbon::parse($range[0])->format('Y-m-d H:i:s');
+            $to = Carbon::parse($range[1])->format('Y-m-d H:i:s');
+            $reservations = Reservation::whereBetween('created_at', [$from, $to])->latest()->get();
+        }
+        else{
+            $reservations = Reservation::latest()->get();
+        }
+
+        foreach($reservations as $item){
             $row = ([
                         $item->invoice_no,
                         $item->room->name,
@@ -30,7 +43,7 @@ class ReportsExport implements FromCollection, WithHeadings, ShouldAutoSize
                         $item->payment_method->name
                     ]);
             $filtered->push($row);
-        });
+        }
 
         return $filtered;
     }

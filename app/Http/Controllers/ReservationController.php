@@ -89,9 +89,11 @@ class ReservationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function cancel(Request $request)
     {
-        //
+        Reservation::findOrFail(decrypt($request->id))->update(['request_cancellation' => true, 'cancellation_reason' => $request->reason]);
+        toastr()->success("Your cancellation request has been sent. Please wait till your request be approve");
+        return redirect()->back();
     }
 
     public function check_availability(Request $request){
@@ -202,5 +204,10 @@ class ReservationController extends Controller
     public function set_status(Request $request){
         Reservation::findOrFail(decrypt($request->id))->update(['status_id' => decrypt($request->status_id)]);
         return response()->json(true);
+    }
+
+    public function cancellation_request(){
+        $reservations = Reservation::where('request_cancellation', true)->latest()->get();
+        return view('admin.reservation.cancellation_request', compact('reservations'));
     }
 }

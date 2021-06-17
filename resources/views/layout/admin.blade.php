@@ -226,13 +226,14 @@
                 <i class="fa fa-book"></i> <span>Accomodation</span>
               </a>
             </li>
-            <li class="{{ Request::is('manage/reservation') ? "active" : "" }}">
-              <a href="{{ route('manage_reservation') }}">
-                <i class="fa fa-bookmark"></i> <span>Reservation</span>
-                @if(Helper::get_reservation()->where('seen', false)->count() > 0)
-                  <small class="label pull-right bg-green">{{ Helper::get_reservation()->where('seen', false)->count() }} New</small>
-                @endif
+            <li class="{{ Request::is('manage/reservation') || Request::is('cancellation/request') ? "active" : "" }} treeview">
+              <a href="#">
+                <i class="fa fa-bookmark"></i> <span>Reservation</span> <i class="fa fa-angle-left pull-right"></i>
               </a>
+              <ul class="treeview-menu">
+                <li class="{{ Request::is('manage/reservation') ? "active" : "" }}"><a href="{{ route('manage_reservation') }}"><i class="fa fa-circle-o"></i> Manage</a></li>
+                <li class="{{ Request::is('cancellation/request') ? "active" : "" }}"><a href="{{ route('cancellation_request') }}"><i class="fa fa-circle-o"></i> Cancellation Request</a></li>
+              </ul>
             </li>
             <li class="{{ Request::is('reports') ? "active" : "" }}">
               <a href="{{ route('reports.index') }}">

@@ -74,6 +74,7 @@
                   @if(Auth::check())
                     <a class="dropdown-item {{ Request::is('guest/my-profile') ? "active" : "" }}" href="{{ route('my_profile') }}">My Profile</a>
                     <a class="dropdown-item {{ Request::is('reservation') ? "active" : "" }}" href="{{ route('reservation.index') }}">My Reservation</a>
+                    <a class="dropdown-item {{ Request::is('guest/inquiries') ? "active" : "" }}" href="{{ route('my_inquiries') }}">My Inquiries</a>
                     <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                   @else
                     <a class="dropdown-item {{ Request::is('login') ? "active" : "" }}" href="{{ route('login') }}">Login</a>
@@ -100,30 +101,31 @@
       <div class="container">
         <div class="row mb-5">
           <div class="col-md-4">
-            <h3>Phone Support</h3>
-            <p>Call us now.</p>
-            <p class="lead"><a href="tel://">{{ Helper::get_contents()[4]->phone }}</a></p>
+            @if(!empty(Helper::get_contents()[4]->phone))
+              <h3>Phone Support</h3>
+              <p>Call us now.</p>
+              <p class="lead"><a href="tel://">{{ Helper::get_contents()[4]->phone }}</a></p>
+            @endif
           </div>
           <div class="col-md-4">
-            <h3>Connect With Us</h3>
-            <p>We are socialized. Follow us</p>
-            <p>
-              <a href="{{ Helper::get_contents()[4]->facebook_link }}" class="pl-0 p-3"><span class="fa fa-facebook"></span></a>
-              <a href="{{ Helper::get_contents()[4]->twitter_link }}" class="p-3"><span class="fa fa-twitter"></span></a>
-              <a href="{{ Helper::get_contents()[4]->instagram_link }}" class="p-3"><span class="fa fa-instagram"></span></a>
-              <a href="{{ Helper::get_contents()[4]->link }}" class="p-3"><span class="fa fa-vimeo"></span></a>
-              <a href="{{ Helper::get_contents()[4]->youtube_link }}" class="p-3"><span class="fa fa-youtube-play"></span></a>
-            </p>
+            @if(Helper::get_contents()[4]->facebook_link || Helper::get_contents()[4]->twitter_link || Helper::get_contents()[4]->instagram_link || Helper::get_contents()[4]->youtube_link)
+              <h3>Connect With Us</h3>
+              <p>We are socialized. Follow us</p>
+              <p>
+                @if(Helper::get_contents()[4]->facebook_link)
+                  <a href="{{ Helper::get_contents()[4]->facebook_link }}" class="pl-0 p-3"><span class="fa fa-facebook"></span></a>
+                @elseif(Helper::get_contents()[4]->twitter_link)
+                  <a href="{{ Helper::get_contents()[4]->twitter_link }}" class="p-3"><span class="fa fa-twitter"></span></a>
+                @elseif(Helper::get_contents()[4]->instagram_link)
+                  <a href="{{ Helper::get_contents()[4]->instagram_link }}" class="p-3"><span class="fa fa-instagram"></span></a>
+                @elseif(Helper::get_contents()[4]->youtube_link)
+                  <a href="{{ Helper::get_contents()[4]->youtube_link }}" class="p-3"><span class="fa fa-youtube-play"></span></a>
+                @endif
+              </p>
+            @endif
           </div>
           <div class="col-md-4">
-            <h3>Connect With Us</h3>
-            <form action="#" class="subscribe">
-              <div class="form-group">
-                <button type="submit"><span class="ion-ios-arrow-thin-right"></span></button>
-                <input type="email" class="form-control" placeholder="Enter email">
-              </div>
-              
-            </form>
+            
           </div>
         </div>
         <div class="row justify-content-center">
