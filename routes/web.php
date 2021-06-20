@@ -10,6 +10,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\PayMayaController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\AmenityController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ProfileController;
@@ -119,6 +120,9 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	
 	# Content Management
 	Route::resource('content', ContentController::class);
+
+	#
+	Route::resource('amenities', AmenityController::class);
 });
 
 /*

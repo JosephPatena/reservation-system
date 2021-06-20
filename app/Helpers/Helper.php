@@ -8,6 +8,7 @@ use App\Models\Accomodation;
 use App\Models\Reservation;
 use App\Models\Inquiry;
 use App\Models\Content;
+use App\Models\Amenity;
 use App\Models\Image;
 use App\Models\Room;
 use App\Models\User;
@@ -22,6 +23,10 @@ class Helper
 
 	public static function get_accomodation(){
 		return Accomodation::all();
+	}
+
+	public static function get_amenities(){
+		return Amenity::where('active', true)->get();
 	}
 
 	public static function get_payment_method(){

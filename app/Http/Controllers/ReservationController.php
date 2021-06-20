@@ -41,6 +41,11 @@ class ReservationController extends Controller
         {
             $room = Room::where('is_available', true)->inRandomOrder()->first();
         }
+        if (empty($room))
+        {
+            toastr()->info("There's no Available room at the moment");
+            return redirect()->back();
+        }
         return view('guest.booknow', compact('room'));
     }
 

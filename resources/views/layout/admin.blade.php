@@ -216,14 +216,19 @@
                 <i class="fa fa-calendar"></i> <span>Calendar</span>
               </a>
             </li>
+            <li class="{{ Request::is('accomodation') ? "active" : "" }}">
+              <a href="{{ route('accomodation.index') }}">
+                <i class="fa fa-book"></i> <span>Accomodation</span>
+              </a>
+            </li>
             <li class="{{ Request::is('rooms') ? "active" : "" }}">
               <a href="{{ route('rooms.index') }}">
                 <i class="fa fa-star"></i> <span>Rooms</span>
               </a>
             </li>
-            <li class="{{ Request::is('accomodation') ? "active" : "" }}">
-              <a href="{{ route('accomodation.index') }}">
-                <i class="fa fa-book"></i> <span>Accomodation</span>
+            <li class="{{ Request::is('amenities') ? "active" : "" }}">
+              <a href="{{ route('amenities.index') }}">
+                <i class="fa fa-archive"></i> <span>Amenities</span>
               </a>
             </li>
             <li class="{{ Request::is('manage/reservation') || Request::is('cancellation/request') ? "active" : "" }} treeview">
@@ -245,17 +250,17 @@
                 <i class="fa fa-users"></i> <span>Guest</span>
               </a>
             </li>
-            <li class="{{ Request::is('billing') ? "active" : "" }}">
-              <a href="{{ route('billing.index') }}">
-                <i class="fa fa-credit-card"></i> <span>Billing</span>
-              </a>
-            </li>
             <li class="{{ Request::is('inquiries') ? "active" : "" }}">
               <a href="{{ route('inquiries.index') }}">
                 <i class="fa fa-comment-o"></i> <span>inquiries</span>
                 @if(Helper::get_inquiries()->where('seen', false)->count() > 0)
                   <small class="label pull-right bg-green">{{ Helper::get_inquiries()->where('seen', false)->count() }} New</small>
                 @endif
+              </a>
+            </li>
+            <li class="{{ Request::is('billing') ? "active" : "" }}">
+              <a href="{{ route('billing.index') }}">
+                <i class="fa fa-credit-card"></i> <span>Billing</span>
               </a>
             </li>
             <li class="{{ Request::is('content') ? "active" : "" }}">
