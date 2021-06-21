@@ -197,7 +197,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="invoice-container">
-            {{-- <i class="ion-ios-printer-outline open-url" data-url="{{ route('print_invoice', encrypt($reservation->id)) }}" style="cursor: pointer;">&nbsp;&nbsp;Print</i> --}}
+            <i class="ion-ios-printer-outline open-url" data-url="{{ route('print_invoice', encrypt($reservation->id)) }}" style="cursor: pointer;">&nbsp;&nbsp;Print</i>
             <div class="invoice-header">
               <div class="title-date">
                 <h2 class="title">INVOICE</h2>
@@ -216,6 +216,9 @@
                   <th>ARRIVAL DATE</th>
                   <th>DEPARTURE DATE</th>
                   <th>LENGTH STAY (day)</th>
+                  @if($reservation->packages->count())
+                    <th>INCLUDED PACKAGE</th>
+                  @endif
                   <th>SUBTOTAL</th>
                 </thead>
 
@@ -226,6 +229,13 @@
                     <td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>
                     <td>{{ \Carbon\Carbon::parse($reservation->departure_date)->format("F d, Y h:i A") }}</td>
                     <td>{{ $reservation->length_of_stay }}</td>
+                    @if($reservation->packages->count())
+                      <td>
+                        @foreach($reservation->packages as $package)
+                          {{ $package->amenity->name }}&nbsp;&nbsp;{{ Helper::get_owner_currency()->currency->symbol . ($package->price / $package->qty) }}&nbsp;x&nbsp;{{ $package->qty }}<br>
+                        @endforeach
+                      </td>
+                    @endif
                     <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
                   </tr>
                 </tbody>

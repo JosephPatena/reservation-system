@@ -73,7 +73,7 @@
           <div class="col-md-12 text-center">
 
             <div class="mb-5 element-animate">
-              <h1>Reservation</h1>
+              <h1>My Reservation</h1>
             </div>
 
           </div>

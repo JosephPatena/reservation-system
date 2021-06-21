@@ -2,6 +2,7 @@
  
 namespace App\Traits;
 
+use App\Models\Amenity;
 use App\Models\Room;
 use Carbon\Carbon;
 use Session;
@@ -22,6 +23,18 @@ trait ReservationTrait {
             return ($room->price * ($different_days + 1)) * 100;
         }
 
-        return $room->price * ($different_days + 1);
+        $amount = $room->price * ($different_days + 1);
+
+        $qty = Session::get('qty');
+        $amenity_id = Session::get('amenity_id');
+        if (!empty($amenity_id)) {
+            $subtotal = 0;
+            foreach($amenity_id as $id) {
+                $subtotal += Amenity::findOrFail($id)->price * $qty[$id-1];
+            }
+            return $subtotal + $amount;
+        }
+
+        return $amount;
 	}
 }

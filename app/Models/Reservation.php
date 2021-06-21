@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PaymentMethod;
+use App\Models\Package;
 use App\Models\Status;
 use App\Models\Room;
 use App\Models\User;
@@ -28,5 +29,9 @@ class Reservation extends Model
 
     public function status(){
         return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function packages(){
+        return $this->hasMany(Package::class);
     }
 }

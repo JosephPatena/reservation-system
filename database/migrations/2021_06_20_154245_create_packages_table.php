@@ -18,6 +18,7 @@ class CreatePackagesTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('amenity_id')->constrained()->onDelete('cascade');
             $table->foreignId('reservation_id')->constrained()->onDelete('cascade');
+            $table->integer('qty');
             $table->float('price', 10, 2);
             $table->timestamps();
         });

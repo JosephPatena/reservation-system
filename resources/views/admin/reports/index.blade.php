@@ -166,6 +166,7 @@
 		                <th>Departure Date</th>
 		                <th>Length of Stay (day)</th>
 		                <th>Guest</th>
+                    <th>Included Package</th>
 		                <th>Total</th>
 		                <th>Status</th>
                     <th>Payment Method</th>
@@ -188,7 +189,17 @@
 		            			<td>
 		                    <img class="open-url" data-url="{{ route('guest', $reservation->guest->id) }}" data-toggle="tooltip" title="View Reports" style="width: 25px; height: 25px; cursor: pointer;" src="{{ !empty($reservation->guest->image->hash_name) ? url('storage/image/'.$reservation->guest->image->hash_name) : asset('admin/dist/img/default-user.png') }}" alt="Guest Image">&nbsp;&nbsp;<a href="{{ route('guest', $reservation->guest->id) }}"  data-toggle="tooltip" title="View Reports">{{ $reservation->guest->name }}</a>
 		            			</td>
-		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
+                      <td>
+                        @forelse($reservation->packages as $package)
+                          {{ $package->amenity->name }}<br>
+                          <small style="color: red;">
+                            {{ Helper::get_owner_currency()->currency->symbol . ($package->price / $package->qty) }}&nbsp;x&nbsp;{{ $package->qty }}<br>
+                          </small>
+                        @empty
+                          No Package
+                        @endforelse
+                      </td>
+		            			<td style="color: red">{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
 		            			<td>
                         @if($reservation->status_id == 1)
                           <span class="badge bg-aqua">{{ $reservation->status->name }}</span>

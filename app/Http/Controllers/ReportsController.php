@@ -69,7 +69,7 @@ class ReportsController extends Controller
 
     public function pdf(){
         $reservations = $this->reservations();
-        $pdf = PDF::loadView('admin.reports.pdf', compact('reservations'));
+        $pdf = PDF::loadView('admin.reports.pdf', compact('reservations'))->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
 

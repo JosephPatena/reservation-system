@@ -52,6 +52,58 @@
       transform: scale(1);
     }
 
+    .new {
+      padding: 50px;
+    }
+
+    .form-group {
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    .form-group .input {
+      padding: 0;
+      height: initial;
+      width: initial;
+      margin-bottom: 0;
+      display: none;
+      cursor: pointer;
+    }
+
+    .form-group .label {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .form-group .label:before {
+      content: "";
+      -webkit-appearance: none;
+      background-color: transparent;
+      border: 2px solid #0079bf;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+        inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+      padding: 10px;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .form-group .input:checked + .label:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 2px;
+      left: 9px;
+      width: 6px;
+      height: 14px;
+      border: solid #0079bf;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+
   </style>
 @endsection
 
@@ -73,24 +125,27 @@
     <!-- END section -->
     @if(!empty($room))
     <section class="site-section" id="site-section">
-      <div class="container">
+      <div style="margin-left: 10%; margin-right: 10%;">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-9">
             <h2 class="mb-5">Reservation Form</h2>
             <form action="{{ route('reservation.store') }}" method="post">
               @csrf
 
               <div class="row">
                 <div class="col-sm-12 form-group">
-                  <table class="table table table-striped table-condensed table-bordered">
+                  <table class="table table table-condensed table-bordered">
                     <thead>
                       <tr>
-                        <th>ROOM TYPE</th>
+                        <td colspan="6"><h5>Room Details</h5></td>
+                      </tr>
+                      <tr>
+                        <th>TYPE</th>
                         <th>MAX GUEST</th>
                         <th>NO OF ROOM</th>
                         <th>PRICE</th>
                         <th>LENGTH STAY (day)</th>
-                        <th>TOTAL</th>
+                        <th>SUB TOTAL</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -100,9 +155,38 @@
                         <td>{{ $room->no_of_room }}</td>
                         <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($room->price, 2) }}</td>
                         <td><span class="stay-length">1</span></td>
-                        <td>{{ Helper::get_owner_currency()->currency->symbol }}<span class="total">{{ number_format($room->price, 2) }}</span></td>
+                        <td>{{ Helper::get_owner_currency()->currency->symbol }}<span class="amount">{{ $room->price }}</span></td>
                       </tr>
+                      <tr>
+                        <td colspan="6"><h5>Additional Package (Optional)</h5></td>
+                      </tr>
+                      <tr>
+                        <th colspan="3">AMENITIES</th>
+                        <th>PRICE</th>
+                        <th>AVAIL</th>
+                        <th>SUB TOTAL</th>
+                      </tr>
+                      @foreach(Helper::get_amenities() as $key => $amenity)
+                        <tr>
+                          <td colspan="3">
+                            <div class="form-group">
+                              <input type="checkbox" id="amenity-{{ $key }}" class="input" name="amenity_id[]" value="{{ $amenity->id }}">
+                              <label for="amenity-{{ $key }}" class="label">{{ $amenity->name }}<br><small>{{ $amenity->description }}</small></label>
+                            </div>
+                          </td>
+                          <td>{{ Helper::get_owner_currency()->currency->symbol }}<span class="price">{{ number_format($amenity->price, 2) }}</span></td>
+                          <td><input type="number" name="qty[]" class="form-control qty" placeholder="Qty"></td>
+                          <td>{{ Helper::get_owner_currency()->currency->symbol }}<span class="sub-total">0.00</span></td>
+                        </tr>
+                      @endforeach
                     </tbody>
+                    <tfoot style="color: #d2b55b">
+                      <tr>
+                        <th colspan="4"></th>
+                        <th>TOTAL </th>
+                        <th>{{ Helper::get_owner_currency()->currency->symbol }}<span class="total">{{ number_format($room->price, 2) }}</span></th>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
                 
@@ -112,10 +196,6 @@
                       <input type='text' class="form-control date-range" id="demo" name="date_range" required="">
                     </div>
                     <label class="status"></label>
-                </div>
-
-                <div class="col-sm-4">
-                  <h4 style="float: right; border: solid thin red; padding: 15px; font-family: Courier;">Total <br>{{ Helper::get_owner_currency()->currency->symbol }}<span class="total">{{ number_format($room->price, 2) }}</span></h4>
                 </div>
               </div>
 
@@ -146,7 +226,7 @@
               <input type="hidden" name="room_id" value="{{ encrypt($room->id) }}">
             </form>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <h3 class="mb-5"><a href="{{ route('room_type', $room->accomodation_id) }}">{{ $room->accomodation->name }}</a></h3>
             <div class="media d-block room mb-0">
               <figure>
@@ -226,11 +306,32 @@
         }
 
         $('span.stay-length').text(res.length_stay)
-        $('span.total').text(new Intl.NumberFormat().format(res.total))
+        $('span.amount').text(res.total)
+
+        compute_total()
       })
       .fail(function(){
         toastr.error("Failed! Something went wrong")
       })
     })
+
+    $('input.qty').on('change', function(){
+      let qty = $(this).val()
+      let price = $(this).parent().siblings().children('span.price').text()
+      $(this).parent().siblings().children('span.sub-total').text(parseFloat(price) * parseInt(qty))
+
+      compute_total()
+    })
+
+    function compute_total(){
+      let total = 0;
+      $('.sub-total').each(function(){
+        let amount = $(this).text()
+        total += parseFloat(amount)
+      })
+      let sub_total = parseFloat($('span.amount').text())
+      let grand_total = total + sub_total
+      $('span.total').text(new Intl.NumberFormat().format(grand_total))
+    }
   </script>
 @endsection

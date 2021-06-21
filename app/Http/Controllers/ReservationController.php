@@ -6,6 +6,8 @@ use App\Traits\ReservationTrait;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
+use App\Models\Amenity;
+use App\Models\Package;
 use App\Models\Room;
 use Carbon\Carbon;
 use Session;
@@ -61,7 +63,8 @@ class ReservationController extends Controller
             toastr()->error("Ops! Looks like your are cheating HAHAHA. You can't do that, STOP!");
             return redirect()->back();
         }
-        
+        Session::put('qty', $request->qty);
+        Session::put('amenity_id', $request->amenity_id);
         Session::put('payment_method_id', $request->payment_method_id);
         Session::put('date_range', $request->date_range);
         Session::put('room_id', $request->room_id);
@@ -183,9 +186,25 @@ class ReservationController extends Controller
             'length_of_stay' => $start_date->diffInDays($end_date)+1
         ]);
 
+        $qty = Session::get('qty');
+        $amenity_id = Session::get('amenity_id');
+        if (!empty($amenity_id)) {
+            foreach($amenity_id as $id) {
+                Package::create([
+                    'user_id' => Auth::id(),
+                    'amenity_id' => $id,
+                    'reservation_id' => $new->id,
+                    'qty' => $qty[$id-1],
+                    'price' => Amenity::findOrFail($id)->price * $qty[$id-1]
+                ]);
+            }
+        }
+
         Session::forget('payment_method_id');
         Session::forget('date_range');
         Session::forget('room_id');
+        Session::forget('amenity_id');
+        Session::forget('qty');
 
         return redirect()->route('transaction_invoice', encrypt($new->id));
     }

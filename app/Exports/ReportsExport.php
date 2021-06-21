@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Collection;
 use App\Models\Reservation;
+use App\Helpers\Helper;
 use Carbon\Carbon;
 use Session;
 
@@ -30,15 +31,25 @@ class ReportsExport implements FromCollection, WithHeadings, ShouldAutoSize
         }
 
         foreach($reservations as $item){
+            $inc_pckgs = "";
+            if ($item->packages->count()) {
+                foreach($item->packages as $package){
+                    $inc_pckgs .= $package->amenity->name." ".Helper::get_owner_currency()->currency->iso_code." ".($package->price / $package->qty)." x ".$package->qty."  ";
+                }
+            }else{
+                $inc_pckgs = "No Package";
+            }
+
             $row = ([
                         $item->invoice_no,
                         $item->room->name,
                         $item->room->accomodation->name,
-                        number_format($item->room->price, 2),
+                        Helper::get_owner_currency()->currency->iso_code." ".number_format($item->room->price, 2),
                         $item->arrival_date,
                         $item->departure_date,
                         $item->guest->name,
-                        number_format($item->total, 2),
+                        $inc_pckgs,
+                        Helper::get_owner_currency()->currency->iso_code." ".number_format($item->total, 2),
                         $item->status->name,
                         $item->payment_method->name
                     ]);

@@ -49,6 +49,7 @@
 		                <th>Arrival Date</th>
 		                <th>Departure Date</th>
 		                <th>Length of Stay (day)</th>
+                    <th>Included Package</th>
 		                <th>Total</th>
                     <th>Status</th>
                     <th>Payment Method</th>
@@ -62,7 +63,17 @@
 		            			<td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>
 		            			<td>{{ \Carbon\Carbon::parse($reservation->departure_date)->format("F d, Y h:i A") }}</td>
 		            			<td>{{ $reservation->length_of_stay }}</td>
-		            			<td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
+                      <td>
+                        @forelse($reservation->packages as $package)
+                          {{ $package->amenity->name }}<br>
+                          <small style="color: red;">
+                            {{ Helper::get_owner_currency()->currency->symbol . ($package->price / $package->qty) }}&nbsp;x&nbsp;{{ $package->qty }}<br>
+                          </small>
+                        @empty
+                          No Package
+                        @endforelse
+                      </td>
+		            			<td style="color: red">{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
                       <td>
                         @if($reservation->status_id == 1)
                           <span class="badge bg-aqua">{{ $reservation->status->name }}</span>
