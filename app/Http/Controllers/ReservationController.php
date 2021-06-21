@@ -91,6 +91,20 @@ class ReservationController extends Controller
         }
     }
 
+    public function update_reservation(Request $request){
+        $date_range = explode("-", $request->date_range);
+        $start_date = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date_range[0])->format('Y-m-d H:i:s'));
+        $end_date = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date_range[1])->format('Y-m-d H:i:s'));
+
+        Reservation::findOrFail(decrypt($request->id))->update([
+            'arrival_date' => Carbon::parse($date_range[0])->format('Y-m-d H:i:s'),
+            'departure_date' => Carbon::parse($date_range[1])->format('Y-m-d H:i:s')
+        ]);
+
+        toastr()->success("Reservation extended successfully");
+        return redirect()->back();
+    }
+
     /**
      * Display the specified resource.
      *
@@ -181,7 +195,7 @@ class ReservationController extends Controller
             'payment_method_id' => decrypt(Session::get('payment_method_id')),
             'total' => $this->compute_total(),
             'arrival_date' => Carbon::parse($date_range[0])->format('Y-m-d H:i:s'),
-            'departure_date' => Carbon::parse($date_range[0])->format('Y-m-d H:i:s'),
+            'departure_date' => Carbon::parse($date_range[1])->format('Y-m-d H:i:s'),
             'status_id' => 1,
             'length_of_stay' => $start_date->diffInDays($end_date)+1
         ]);

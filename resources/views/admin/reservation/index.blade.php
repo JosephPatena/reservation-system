@@ -103,16 +103,17 @@
                       <td>{{ $reservation->payment_method->name }}</td>
                       <td>
                         <div class="btn-group">
-                          <button class="btn btn-primary btn-sm open-url" data-url="{{ route('reports.show', $reservation->id) }}" data-toggle="tooltip" title="Show Details"><i class="fa fa-folder-open-o"></i></button>
-                          <button type="button" class="btn btn-sm btn-success" style="pointer-events: none;">Set as</button>
-                          <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+                          <button type="button" class="btn btn-sm btn-primary" style="pointer-events: none;">Action</button>
+                          <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
                           <ul class="dropdown-menu" role="menu">
-                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(3) }}" data-toggle="modal" data-target="#confirm">Check In</a></li>
-                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(4) }}" data-toggle="modal" data-target="#confirm">Check Out</a></li>
-                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(2) }}" data-toggle="modal" data-target="#confirm">Cancel</a></li>
+                            <li><a href="{{ route('reports.show', $reservation->id) }}">View Reports</a></li>
+                            <li><a style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-toggle="modal" data-target="#extend-booking" class="extend" data-current="{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A"). " - ".\Carbon\Carbon::parse($reservation->departure_date)->format("F d, Y h:i A") }}">Extend Booking</a></li>
+                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(3) }}" data-toggle="modal" data-target="#confirm">Set as Check In</a></li>
+                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(4) }}" data-toggle="modal" data-target="#confirm">Set as Check Out</a></li>
+                            <li><a class="set-status" style="cursor: pointer;" data-id="{{ encrypt($reservation->id) }}" data-status_id="{{ encrypt(2) }}" data-toggle="modal" data-target="#confirm">Cancel Reservation</a></li>
                           </ul>
                         </div>
                       </td>
@@ -156,6 +157,46 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+
+  <div class="modal fade" id="extend-booking">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Extend Reservation</h4>
+        </div>
+        <form action="{{ route('update_reservation') }}" method="POST">
+          @csrf
+          @method('PUT')
+
+          <div class="modal-body">
+            <div class="form-horizontal">
+              <input type="hidden" class="id" name="id">
+
+              <div class="form-group">
+                <label for="inputCurrent" class="col-sm-2 control-label">Current Reservation</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="inputCurrent" readonly="">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="inputRange" class="col-sm-2 control-label">Update To <span style="color: red;">*</span></label>
+                <div class="col-sm-10">
+                  <input name="date_range" type="text" class="form-control" id="inputRange" required="" value="{{ old('date_range') }}">
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary btn-sm">Update and Close</button>
+          </div>
+        </form>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 @endsection
 
 @section('scripts')
@@ -166,6 +207,10 @@
   <!-- DataTables -->
   <script src="{{ asset('admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
   <script src="{{ asset('admin/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <!-- Include Date Range Picker -->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
   <!-- SlimScroll -->
   <script src="{{ asset('admin/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
   <!-- FastClick -->
@@ -186,6 +231,52 @@
         "info": true,
         "autoWidth": false
       });
+    });
+
+    //Date range picker with time picker
+    $('#inputRange').daterangepicker({
+        "showISOWeekNumbers": true,
+        "timePicker": true,
+        "autoUpdateInput": true,
+        "locale": {
+            "cancelLabel": 'Clear',
+            "format": "MMMM DD, YYYY h:mm A",
+            "separator": " - ",
+            "applyLabel": "Apply",
+            "cancelLabel": "Cancel",
+            "fromLabel": "From",
+            "toLabel": "To",
+            "customRangeLabel": "Custom",
+            "weekLabel": "W",
+            "daysOfWeek": [
+                "Su",
+                "Mo",
+                "Tu",
+                "We",
+                "Th",
+                "Fr",
+                "Sa"
+            ],
+            "monthNames": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            "firstDay": 1
+        },
+        "linkedCalendars": true,
+        "showCustomRangeLabel": false,
+        "startDate": 1,
+        "opens": "center"
     });
 
     $(document).on('click', '.set-status', function(){
@@ -229,5 +320,13 @@
         toastr.error("Failed! Something went wrong")
       })
     }
+
+    $('.extend').on('click', function(){
+      let id = $(this).data('id')
+      let current = $(this).data('current')
+      $('input.id').val(id)
+      $('#inputCurrent').val(current)
+      $('#inputRange').val(current)
+    })
   </script>
 @endsection

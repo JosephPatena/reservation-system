@@ -114,6 +114,7 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	Route::get('manage/reservation', [ReservationController::class, 'manage_reservation'])->name('manage_reservation');
 	Route::get('cancellation/request', [ReservationController::class, 'cancellation_request'])->name('cancellation_request');
 	Route::post('set-status', [ReservationController::class, 'set_status'])->name('set_status');
+	Route::put('reservation/update', [ReservationController::class, 'update_reservation'])->name('update_reservation');
 
 	# Notification
 	Route::post('seen-notif', [ProfileController::class, 'seen_notif'])->name('seen_notif');
