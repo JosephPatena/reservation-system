@@ -48,7 +48,7 @@
             <div class="col-xs-8">
               <div class="checkbox icheck">
                 <label>
-                  <input type="checkbox" name="remember_me"> Remember Me
+                  <input type="checkbox" required=""> <a href="{{ route('terms_and_condition.show', 1) }}">Terms and Condition</a>
                 </label>
               </div>
             </div><!-- /.col -->

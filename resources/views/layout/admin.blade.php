@@ -268,6 +268,11 @@
                 <i class="fa fa-cog"></i> <span>Content Management</span>
               </a>
             </li>
+            <li class="{{ Request::is('terms_and_condition/1/edit') ? "active" : "" }}">
+              <a href="{{ route('terms_and_condition.edit', 1) }}">
+                <i class="fa fa-file-word-o"></i> <span>Terms and Condition</span>
+              </a>
+            </li>
           </ul>
         </section>
         <!-- /.sidebar -->

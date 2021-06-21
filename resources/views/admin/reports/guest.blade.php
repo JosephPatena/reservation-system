@@ -98,6 +98,7 @@
                     <th>Departure Date</th>
                     <th>Length of Stay (day)</th>
                     <th>Included Package</th>
+                    <th>Guest</th>
                     <th>Total</th>
                     <th>Status</th>
                     <th>Payment Method</th>
@@ -126,6 +127,15 @@
                         @empty
                           No Package
                         @endforelse
+                      </td>
+                      <td>
+                        @php
+                          $guests = explode(",", $reservation->guests);
+                        @endphp
+
+                        @foreach($guests as $guest)
+                          {{ $guest }},<br>
+                        @endforeach
                       </td>
                       <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->total, 2) }}</td>
                       <td>

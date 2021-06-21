@@ -64,6 +64,7 @@ class ReservationController extends Controller
             return redirect()->back();
         }
         Session::put('qty', $request->qty);
+        Session::put('guests', $request->guests);
         Session::put('amenity_id', $request->amenity_id);
         Session::put('payment_method_id', $request->payment_method_id);
         Session::put('date_range', $request->date_range);
@@ -193,6 +194,7 @@ class ReservationController extends Controller
             'user_id' => Auth::id(),
             'room_id' => decrypt(Session::get('room_id')),
             'payment_method_id' => decrypt(Session::get('payment_method_id')),
+            'guests' => Session::get('guests'),
             'total' => $this->compute_total(),
             'arrival_date' => Carbon::parse($date_range[0])->format('Y-m-d H:i:s'),
             'departure_date' => Carbon::parse($date_range[1])->format('Y-m-d H:i:s'),
@@ -230,7 +232,7 @@ class ReservationController extends Controller
 
     public function print_invoice($id){
         $reservation = Reservation::findOrFail(decrypt($id));
-        $pdf = PDF::loadView('guest.checkout.pdf', compact('reservation'));
+        $pdf = PDF::loadView('guest.checkout.pdf', compact('reservation'))->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
 

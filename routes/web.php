@@ -18,6 +18,7 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\AccomodationController;
+use App\Http\Controllers\TermsAndConditionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,7 +123,7 @@ Route::group(['middleware' => ['admin', 'auth']], function(){
 	# Content Management
 	Route::resource('content', ContentController::class);
 
-	#
+	# Amenities
 	Route::resource('amenities', AmenityController::class);
 });
 
@@ -178,6 +179,8 @@ Route::group(['middleware' => ['visitor', 'auth', 'restriction']], function(){
 	# Profile
 	Route::get('guest/my-profile', [ProfileController::class, 'my_profile'])->name('my_profile');
 });
+
+Route::resource('terms_and_condition', TermsAndConditionController::class);
 
 /*
 |--------------------------------------------------------------------------

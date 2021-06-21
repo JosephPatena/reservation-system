@@ -1,5 +1,56 @@
 @extends('layout.guest')
 
+@section('stylesheets')
+  <style type="text/css">
+    .form-group {
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    .form-group .input {
+      padding: 0;
+      height: initial;
+      width: initial;
+      margin-bottom: 0;
+      display: none;
+      cursor: pointer;
+    }
+
+    .form-group .label {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .form-group .label:before {
+      content: "";
+      -webkit-appearance: none;
+      background-color: transparent;
+      border: 2px solid #c29200;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+        inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+      padding: 10px;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .form-group .input:checked + .label:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 2px;
+      left: 9px;
+      width: 6px;
+      height: 14px;
+      border: solid #c29200;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  </style>
+@endsection
+
 @section('content')
 
 	<section class="site-hero site-hero-innerpage overlay" data-stellar-background-ratio="0.5" style="background-image: url('{{ Helper::get_contents()[0]->default ? asset('guest/images/big_image_1.jpg') : url('storage/image/' . Helper::get_contents()[0]->image->hash_name) }}');">
@@ -24,6 +75,13 @@
             <h2 class="mb-5">Register</h2>
             <form action="{{ route('register_user') }}" method="post">
               @csrf
+              <div class="row">
+                <div class="col-md-12 form-group">
+                  <div class="form-group">
+                    <label for="terms">Already have an account? <a href="{{ route('login') }}">Login instead</a></label>
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 <div class="col-md-12 form-group">
                   <label for="name">Name</label>
@@ -52,6 +110,14 @@
                 <div class="col-md-12 form-group">
                   <label for="retype_password">Retype Password</label>
                   <input type="password" id="retype_password" class="form-control" value="{{ old('retype_password') }}" name="retype_password" placeholder="Please retype your Password" required="">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 form-group">
+                  <div class="form-group">
+                    <input type="checkbox" id="terms" class="input" name="terms_and_condition" required="">
+                    <label for="terms" class="label"><a href="{{ route('terms_and_condition.show', 1) }}">Terms and Condition</a></label>
+                  </div>
                 </div>
               </div>
               <div class="row">

@@ -58,6 +58,7 @@
                     <th>Arrival Date</th>
                     <th>Departure Date</th>
                     <th>Length of Stay (day)</th>
+                    <th>Reserved By</th>
                     <th>Guest</th>
                     <th>Included Package</th>
                     <th>Total</th>
@@ -80,6 +81,15 @@
                         <td>{{ $reservation->length_of_stay }}</td>
                         <td>
                             {{ $reservation->guest->name }}
+                        </td>
+                        <td>
+                            @php
+                              $guests = explode(",", $reservation->guests);
+                            @endphp
+
+                            @foreach($guests as $guest)
+                              {{ $guest }},<br>
+                            @endforeach
                         </td>
                         <td>
                             @forelse($reservation->packages as $package)

@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CurrenciesSeeder::class);
         $this->call(OwnerCurrencySeeder::class);
         $this->call(ContentSeeder::class);
-        
+        $this->call(TermsAndConditionSeeder::class);        
     }
 }

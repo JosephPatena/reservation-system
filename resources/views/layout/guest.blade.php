@@ -44,7 +44,7 @@
           </button>
 
           <div class="collapse navbar-collapse navbar-light" id="navbarsExample05">
-            <ul class="navbar-nav ml-auto pl-lg-5 pl-0">
+            <ul class="navbar-nav ml-auto pl-lg-5 pl-0" style="font-weight: bolder; font-size: 20px;">
               
               <li class="nav-item">
                 <a class="nav-link {{ Request::is('guest/homepage') ? "active" : "" }}" href="/">Home</a>

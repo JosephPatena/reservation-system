@@ -211,6 +211,7 @@
             <div class="invoice-body">
               <table>
                 <thead>
+                  <th>GUEST</th>
                   <th>ROOM TYPE</th>
                   <th>PRICE</th>
                   <th>ARRIVAL DATE</th>
@@ -224,6 +225,15 @@
 
                 <tbody id="table-body">
                   <tr class="single-row">
+                    <td>
+                      @php
+                        $guests = explode(",", $reservation->guests);
+                      @endphp
+
+                      @foreach($guests as $guest)
+                        {{ $guest }},<br>
+                      @endforeach
+                    </td>
                     <td>{{ $reservation->room->accomodation->name }}</td>
                     <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($reservation->room->price, 2) }}</td>
                     <td>{{ \Carbon\Carbon::parse($reservation->arrival_date)->format("F d, Y h:i A") }}</td>

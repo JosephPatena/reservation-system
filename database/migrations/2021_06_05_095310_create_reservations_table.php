@@ -19,6 +19,7 @@ class CreateReservationsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('room_id')->constrained()->onDelete('cascade');
             $table->foreignId('payment_method_id')->constrained()->onDelete('cascade');
+            $table->longText('guests');
             $table->float('total', 10, 2)->default(0);
             $table->dateTime('arrival_date');
             $table->dateTime('departure_date');

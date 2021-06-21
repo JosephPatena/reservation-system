@@ -142,6 +142,7 @@
                       <tr>
                         <th>TYPE</th>
                         <th>MAX GUEST</th>
+                        <th>GUEST</th>
                         <th>NO OF ROOM</th>
                         <th>PRICE</th>
                         <th>LENGTH STAY (day)</th>
@@ -152,23 +153,26 @@
                       <tr>
                         <td>{{ $room->accomodation->name }}</td>
                         <td>{{ $room->max_guest }}</td>
+                        <td>
+                          <textarea class="form-control" name="guests" placeholder="Please input guest names separated with comma. Example: John Doe, Jane Doe, and so on" rows="5"></textarea>
+                        </td>
                         <td>{{ $room->no_of_room }}</td>
                         <td>{{ Helper::get_owner_currency()->currency->symbol . number_format($room->price, 2) }}</td>
                         <td><span class="stay-length">1</span></td>
                         <td>{{ Helper::get_owner_currency()->currency->symbol }}<span class="amount">{{ $room->price }}</span></td>
                       </tr>
                       <tr>
-                        <td colspan="6"><h5>Additional Package (Optional)</h5></td>
+                        <td colspan="7"><h5>Additional Package (Optional)</h5></td>
                       </tr>
                       <tr>
-                        <th colspan="3">AMENITIES</th>
+                        <th colspan="4">AMENITIES</th>
                         <th>PRICE</th>
                         <th>AVAIL</th>
                         <th>SUB TOTAL</th>
                       </tr>
                       @foreach(Helper::get_amenities() as $key => $amenity)
                         <tr>
-                          <td colspan="3">
+                          <td colspan="4">
                             <div class="form-group">
                               <input type="checkbox" id="amenity-{{ $key }}" class="input" name="amenity_id[]" value="{{ $amenity->id }}">
                               <label for="amenity-{{ $key }}" class="label">{{ $amenity->name }}<br><small>{{ $amenity->description }}</small></label>
@@ -182,7 +186,7 @@
                     </tbody>
                     <tfoot style="color: #d2b55b">
                       <tr>
-                        <th colspan="4"></th>
+                        <th colspan="5"></th>
                         <th>TOTAL </th>
                         <th>{{ Helper::get_owner_currency()->currency->symbol }}<span class="total">{{ number_format($room->price, 2) }}</span></th>
                       </tr>
