@@ -78,7 +78,7 @@
               <div class="row">
                 <div class="col-md-12 form-group">
                   <div class="form-group">
-                    <label for="terms">Not yet registered? <a href="{{ route('login') }}">Create an account</a></label>
+                    <label for="terms">Not yet registered? <a href="{{ route('register') }}">Create an account</a></label>
                   </div>
                 </div>
               </div>

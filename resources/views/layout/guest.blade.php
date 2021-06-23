@@ -84,7 +84,7 @@
               </li>
 
               <li class="nav-item cta {{ Request::is('reservation/create') ? "active" : "" }}">
-                <a class="nav-link" href="{{ route('reservation.create') }}"><span>Book Now</span></a>
+                <a class="nav-link" href="{{ route('reservation.create') }}"><span>Reserve Now</span></a>
               </li>
 
             </ul>
