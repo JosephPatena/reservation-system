@@ -206,7 +206,7 @@
           },
           "linkedCalendars": true,
           "showCustomRangeLabel": false,
-          "startDate": 1,
+          "startDate": new Date(),
           "opens": "center"
       });
 

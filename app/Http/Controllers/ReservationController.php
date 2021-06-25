@@ -97,9 +97,17 @@ class ReservationController extends Controller
         $start_date = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date_range[0])->format('Y-m-d H:i:s'));
         $end_date = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::parse($date_range[1])->format('Y-m-d H:i:s'));
 
-        Reservation::findOrFail(decrypt($request->id))->update([
+        $reservation = Reservation::findOrFail(decrypt($request->id));
+
+        $added_days = ($start_date->diffInDays($end_date)+1) - $reservation->length_of_stay;
+
+        $added_amount = Room::findOrFail($reservation->room_id)->price * $added_days;
+
+        $reservation->update([
             'arrival_date' => Carbon::parse($date_range[0])->format('Y-m-d H:i:s'),
-            'departure_date' => Carbon::parse($date_range[1])->format('Y-m-d H:i:s')
+            'departure_date' => Carbon::parse($date_range[1])->format('Y-m-d H:i:s'),
+            'total' => $reservation->total + $added_amount,
+            'length_of_stay' => $reservation->length_of_stay + $added_days
         ]);
 
         toastr()->success("Reservation extended successfully");
